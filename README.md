@@ -2,7 +2,7 @@
 The OGC Enviromental Data Retreveal API query parser makes it easier to parse and use the API query.
 
 ## Example
-### Intiate
+### Initiate
 ```python
 from edr_query_parser import EDRQueryParser
 
