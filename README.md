@@ -13,25 +13,25 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
 
 ### Get the collection name
 ```python
-print(edr_query.get_collection_name())
+edr_query.get_collection_name()
 ```
 
 ### Get the query type
 ```python
-print(edr_query.get_query_type())
+edr_query.get_query_type())
 ```
 
 ### Get the coords type
 ```python
-print(edr_query.get_coords_type())
+edr_query.get_coords_type()
 ```
 
 ### Get the coords coordinates
 ```python
-print(edr_query.get_coords_coordinates())
+edr_query.get_coords_coordinates()
 ```
 
 ### Get the requested output format
 ```python
-print(edr_query.get_format())
+edr_query.get_format()
 ```
