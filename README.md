@@ -35,3 +35,27 @@ edr_query.get_coords_coordinates()
 ```python
 edr_query.get_format()
 ```
+
+# Get the datetime
+```python
+if edr.is_datetime_interval():
+    edr.get_datetime_from()
+    edr.get_datetime_to()
+else:
+    edr.get_datetime()
+```
+
+# Get the get coords type
+```python
+edr.get_coords_type()
+```
+
+# Get the coords coorinates
+```python
+edr.get_coords_coordinates()
+```
+
+# Get the coords dictionary
+```python
+edr.get_coords_dic()
+```
