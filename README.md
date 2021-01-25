@@ -1,4 +1,4 @@
-# Enviromental Data Retreval Query Parser
+# Environmental Data Retrieval Query Parser
 The OGC Enviromental Data Retreveal API query parser makes it easier to parse and use the API query.
 
 ## Example
