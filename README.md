@@ -16,25 +16,28 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
 edr_query.get_collection_name()
 ```
 
+returns string of the requested collection
+
 ### Get the query type
 ```python
 edr_query.get_query_type())
 ```
 
-### Get the coords type
-```python
-edr_query.get_coords_type()
-```
-
-### Get the coords coordinates
-```python
-edr_query.get_coords_coordinates()
-```
+returns string of the query type
 
 ### Get the requested output format
 ```python
 edr_query.get_format()
 ```
+
+returns string of the requested output format
+
+### Get the paramter names
+```python
+edr_query.get_parameter_name()
+```
+
+returns list of requested parameters
 
 ### Get the datetime
 ```python
@@ -45,17 +48,32 @@ else:
     edr.get_datetime()
 ```
 
+returns datetime object of the requested datetime
+
 ### Get the get coords type
 ```python
 edr.get_coords_type()
 ```
+return the well know text coords type
 
 ### Get the coords coorinates
 ```python
 edr.get_coords_coordinates()
 ```
 
+return the well know text coordinates request
+
 ### Get the coords dictionary
 ```python
 edr.get_coords_dic()
 ```
+
+returns dictionary of the well known text query request
+
+
+### Get the CRS
+```python
+edr.get_crs()
+```
+
+return string for the requested CRS
