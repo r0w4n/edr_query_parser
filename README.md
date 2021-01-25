@@ -1,6 +1,9 @@
 # Environmental Data Retrieval Query Parser
 The OGC Environmental Data Retrieval API query parser makes it easier to parse and use the API query.
 
+![Python package](https://github.com/r0w4n/edr_query_parser/workflows/Python%20package/badge.svg?branch=main)
+
+
 ## Example
 ### Initiate
 ```python
