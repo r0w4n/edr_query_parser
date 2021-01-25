@@ -1,5 +1,5 @@
 # Environmental Data Retrieval Query Parser
-The OGC Environmental Data Retrieval API query parser makes it easier to parse and use the API query.
+The OGC Environmental Data Retrieval API query parser makes it easy to parse and use the API query.
 
 ![Python package](https://github.com/r0w4n/edr_query_parser/workflows/Python%20package/badge.svg?branch=main)
 
@@ -35,7 +35,7 @@ edr_query.get_format()
 
 returns string of the requested output format
 
-### Get the paramter names
+### Get the parameter names
 ```python
 edr_query.get_parameter_name()
 ```
@@ -57,9 +57,9 @@ returns datetime object of the requested datetime
 ```python
 edr.get_coords_type()
 ```
-return the well know text coords type
+return the well-know text coords type
 
-### Get the coords coorinates
+### Get the coords coordinates
 ```python
 edr.get_coords_coordinates()
 ```
