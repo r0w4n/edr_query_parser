@@ -57,14 +57,14 @@ returns datetime object of the requested datetime
 ```python
 edr.get_coords_type()
 ```
-return the well-know text coords type
+returns the well-know text coords type
 
 ### Get the coords coordinates
 ```python
 edr.get_coords_coordinates()
 ```
 
-return the well know text coordinates request
+returns the well know text coordinates request
 
 ### Get the coords dictionary
 ```python
@@ -79,4 +79,4 @@ returns dictionary of the well known text query request
 edr.get_crs()
 ```
 
-return string for the requested CRS
+returns string for the requested CRS
