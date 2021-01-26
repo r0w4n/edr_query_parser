@@ -72,8 +72,9 @@ edr.get_coords_coordinates()
 returns the well know text coordinates request
 
 ## Get the coords dictionary
+
 ```python
-edr.get_coords_dic()
+edr.get_coords()
 ```
 
 returns dictionary of the well known text query request
