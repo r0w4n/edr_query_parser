@@ -60,14 +60,14 @@ class EDRQueryParser:
             return self.query_dic.get('f')
         return None
 
-    def get_coords_dic(self):
+    def get_coords(self):
         return wkt.loads(self.query_dic.get('coords'))
 
     def get_coords_type(self):
-        return self.get_coords_dic()['type']
+        return self.get_coords()['type']
 
     def get_coords_coordinates(self):
-        return self.get_coords_dic()['coordinates']
+        return self.get_coords()['coordinates']
 
     def get_crs(self):
         if 'crs' in self.query_dic:
