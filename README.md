@@ -2,6 +2,7 @@
 The OGC Environmental Data Retrieval API query parser makes it easy to parse and use the API query.
 
 ![Python package](https://github.com/r0w4n/edr_query_parser/workflows/Python%20package/badge.svg?branch=main)
+![Upload Python Package](https://github.com/r0w4n/edr_query_parser/workflows/Upload%20Python%20Package/badge.svg)
 
 # install
 ```shell
