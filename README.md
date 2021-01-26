@@ -6,8 +6,9 @@ The OGC Environmental Data Retrieval API query parser makes it easy to parse and
 
 ## Example
 ### Initiate
+
 ```python
-from edr_query_parser import EDRQueryParser
+from edr_query_parser.edr_query_parser import EDRQueryParser
 
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
