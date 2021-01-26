@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="edr_query_parser-Nuisance", # Replace with your own username
+    name="edr query parser",
     version="0.0.1",
     author="r0w4n",
     author_email="r0w4n@nuisance.com",
