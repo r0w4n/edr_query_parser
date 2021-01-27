@@ -336,7 +336,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
             {
                 'url': 'https://somewhere.com/collections/my_collection/instances/my_instances?parameter-name'
                        '=&something=1',
-                'expected': 'my_instances'
+                'expected': 'test'
             },
         ]
 
