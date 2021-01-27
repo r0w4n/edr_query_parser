@@ -35,7 +35,10 @@ class TestEDRQueryParserMethods(unittest.TestCase):
             {'url': 'https://somewhere.com/collections/my_collection/corridor?', 'expected': 'corridor'},
             {'url': 'https://somewhere.com/collections/my_collection/items?', 'expected': 'items'},
             {'url': 'https://somewhere.com/collections/my_collection/locations?', 'expected': 'locations'},
-            {'url': 'https://somewhere.com/collections/my_collection/instances?', 'expected': 'instances'}
+            {'url': 'https://somewhere.com/collections/my_collection/instances?', 'expected': 'instances'},
+            {'url': 'https://somewhere.com/collections/metar/locations/EGLL?', 'expected': 'locations'},
+            {'url': 'https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z?', 'expected': 'items'},
+
         ]
 
         for test_dic in test_data:
@@ -69,6 +72,10 @@ class TestEDRQueryParserMethods(unittest.TestCase):
             {
                 'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=&something=1',
                 'expected': None
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/locations/my_locations?parameter-name=parameter1',
+                'expected': ['parameter1']
             },
         ]
 
@@ -267,6 +274,75 @@ class TestEDRQueryParserMethods(unittest.TestCase):
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
             self.assertEqual(edr.get_coords_coordinates(), test_dic['expected'])
+
+    def test_get_location_id(self):
+        test_data = [
+            {
+                'url': 'https://somewhere.com/collections/my_collection/locations/my_location_id/',
+                'expected': 'my_location_id'
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/locations/', 'expected': None
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/locations', 'expected': None
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/locations/my_locations?parameter-name'
+                       '=&something=1',
+                'expected': 'my_locations'
+            },
+        ]
+
+        for test_dic in test_data:
+            edr = EDRQueryParser(test_dic['url'])
+            self.assertEqual(edr.get_locations_id(), test_dic['expected'])
+
+    def test_get_location_id(self):
+        test_data = [
+            {
+                'url': 'https://somewhere.com/collections/my_collection/items/my_item_id/',
+                'expected': 'my_item_id'
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/items/', 'expected': None
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/items', 'expected': None
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/items/my_item?parameter-name'
+                       '=&something=1',
+                'expected': 'my_item'
+            },
+        ]
+
+        for test_dic in test_data:
+            edr = EDRQueryParser(test_dic['url'])
+            self.assertEqual(edr.get_items_id(), test_dic['expected'])
+
+    def test_get_instances_id(self):
+        test_data = [
+            {
+                'url': 'https://somewhere.com/collections/my_collection/instances/my_instances/',
+                'expected': 'my_instances'
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/instances/', 'expected': None
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/instances', 'expected': None
+            },
+            {
+                'url': 'https://somewhere.com/collections/my_collection/instances/my_instances?parameter-name'
+                       '=&something=1',
+                'expected': 'my_instances'
+            },
+        ]
+
+        for test_dic in test_data:
+            edr = EDRQueryParser(test_dic['url'])
+            self.assertEqual(edr.get_instances_id(), test_dic['expected'])
 
 
 if __name__ == '__main__':

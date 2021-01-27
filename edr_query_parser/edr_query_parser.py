@@ -22,7 +22,15 @@ class EDRQueryParser:
     def __init__(self, url):
         self.url_list = urlsplit(url).path.split('/')
         self.url_list.pop(0)
+        self.url_list = list(filter(None, self.url_list))
         self.query_dic = {str(key): ''.join(value) for key, value in parse_qs(urlsplit(url).query).items()}
+
+    def _get_id(self, query_id):
+        if self.get_query_type() == query_id:
+            collections_index = self.url_list.index(query_id)
+            if len(self.url_list) > collections_index + 1:
+                return self.url_list[collections_index + 1]
+        return None
 
     def get_collection_name(self):
         collections_index = self.url_list.index('collections')
@@ -33,8 +41,9 @@ class EDRQueryParser:
 
     def get_query_type(self):
         query_type = Enum('query_type', 'position radius area cube trajectory corridor items locations instances')
+        collections_index = self.url_list.index('collections')
         try:
-            return query_type[self.url_list[-1]].name
+            return query_type[self.url_list[collections_index + 2]].name
         except KeyError:
             raise ValueError('unsupported query type found in url')
 
@@ -73,3 +82,18 @@ class EDRQueryParser:
         if 'crs' in self.query_dic:
             return self.query_dic.get('crs')
         return None
+
+    def get_items_id(self):
+        return self._get_id('items')
+
+    def get_locations_id(self):
+        return self._get_id('locations')
+
+    def get_instances_id(self):
+        return self._get_id('instances')
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
+                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
+                           'parameter2&f=geoJSON&crs=crs86')
+
+edr_query.get_datetime_from().timestamp()

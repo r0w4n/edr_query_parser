@@ -28,7 +28,7 @@ returns string of the requested collection
 
 ## Get the query type
 ```python
-edr_query.get_query_type())
+edr_query.get_query_type()
 ```
 
 returns string of the query type
@@ -53,7 +53,7 @@ if edr.is_datetime_interval():
     edr.get_datetime_from()
     edr.get_datetime_to()
 else:
-    edr.get_datetime()
+    edr.get_datetime().timestamp() # e.g. gets the timestamp of the datetime
 ```
 
 returns datetime object of the requested datetime
@@ -86,3 +86,24 @@ edr.get_crs()
 ```
 
 returns string for the requested CRS
+
+## Get instances id
+```python
+edr.get_instances_id()
+```
+
+returns string of the instances id
+
+## Get items id
+```python
+edr.get_items_id()
+```
+
+returns string of the items id
+
+## Get locations id
+```python
+edr.get_locations_id()
+```
+
+returns string of the locations id
