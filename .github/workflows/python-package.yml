@@ -39,7 +39,7 @@ jobs:
          python -m unittest -v edr_query_parser/tests/test.py
          
   deploy:
-    if: ${{ github.ref == 'master' }}
+    if: ${{ github.ref == 'main' }}
     needs: build
     runs-on: ubuntu-latest
 
