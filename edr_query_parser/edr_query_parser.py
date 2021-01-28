@@ -91,9 +91,3 @@ class EDRQueryParser:
 
     def get_instances_id(self):
         return self._get_id('instances')
-
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
-                           'parameter2&f=geoJSON&crs=crs86')
-
-edr_query.get_datetime_from().timestamp()
