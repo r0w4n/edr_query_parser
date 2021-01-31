@@ -16,57 +16,67 @@ from edr_query_parser import EDRQueryParser
 
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
-                           'parameter2&f=geoJSON&crs=crs86')
+                           'parameter2&f=geoJSON&crs=crs86&z=all')
 ```
 
 ## Get the collection name
+
 ```python
-edr_query.get_collection_name()
+edr_query.collection_name
 ```
 
 returns string of the requested collection
 
 ## Get the query type
+
 ```python
-edr_query.get_query_type()
+edr_query.query_type
 ```
 
 returns string of the query type
 
 ## Get the requested output format
+
 ```python
-edr_query.get_format()
+edr_query.format
 ```
 
 returns string of the requested output format
 
 ## Get the parameter names
+
 ```python
-edr_query.get_parameter_name()
+if edr_query.parameter_name is not None:
+    print('SELECT ' + ",".join(edr_query.parameter_name) + ' from observations')
+else:
+    print('SELECT * from observations')
 ```
 
 returns list of requested parameters
 
 ## Get the datetime
+
 ```python
-if edr.is_datetime_interval():
-    edr.get_datetime_from()
-    edr.get_datetime_to()
+if edr.is_datetime_interval:
+    edr.datetime_from
+    edr.datetime_to
 else:
-    edr.get_datetime().timestamp() # e.g. gets the timestamp of the datetime
+    edr.datetime.timestamp()  # e.g. gets the timestamp of the datetime
 ```
 
 returns datetime object of the requested datetime
 
 ## Get the get coords type
+
 ```python
-edr.get_coords_type()
+edr.coords_type
 ```
 returns the well-know text coords type
 
 ## Get the coords coordinates
+
 ```python
-edr.get_coords_coordinates()
+edr.coords_coordinates
 ```
 
 returns the well know text coordinates request
@@ -74,36 +84,48 @@ returns the well know text coordinates request
 ## Get the coords dictionary
 
 ```python
-edr.get_coords()
+edr.coords
 ```
 
 returns dictionary of the well known text query request
 
 
 ## Get the CRS
+
 ```python
-edr.get_crs()
+edr.crs
 ```
 
 returns string for the requested CRS
 
 ## Get instances id
+
 ```python
-edr.get_instances_id()
+edr.instances_id
 ```
 
 returns string of the instances id
 
 ## Get items id
+
 ```python
-edr.get_items_id()
+edr.items_id
 ```
 
 returns string of the items id
 
 ## Get locations id
+
 ```python
-edr.get_locations_id()
+edr.locations_id
 ```
 
 returns string of the locations id
+
+## Get z height
+
+```python
+edr.z
+```
+
+returns float of the height
