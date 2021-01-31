@@ -3,7 +3,6 @@ from dateutil.parser import isoparse
 from enum import Enum
 from geomet import wkt
 
-
 class EDRQueryParser:
     def __init__(self, url):
         self.url_list = urlsplit(url).path.split('/')

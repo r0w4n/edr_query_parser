@@ -305,8 +305,9 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
     def test_get_coords_coordinates(self):
         test_data = [
-            {'url': 'https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
-             'expected': [0.0, 51.48]},
+            {
+                'url': 'https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
+                'expected': [0.0, 51.48]},
             {
                 'url': 'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
                 'expected': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]
