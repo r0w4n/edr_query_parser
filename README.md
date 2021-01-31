@@ -10,122 +10,81 @@ pip install edr-query-parser
 ```
 
 # Usage
-## Initiate
+
+## EDR Collection Name Example
+```python
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2&coords=POINT(57.819 '
+                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=crs86&z=500/400')
+
+select = 'SELECT * FROM ' + edr_query.collection_name
+
+print(select)
+```
+
+## EDR coords Example
 ```python
 from edr_query_parser import EDRQueryParser
 
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
                            'parameter2&f=geoJSON&crs=crs86&z=all')
+
+select = 'SELECT * FROM observations'
+
+if edr_query.coords.is_set:
+    if edr_query.coords.coords_type == 'Point':
+        select += ' WHERE NEAREST_NEIGHBOUR(' + str(edr_query.coords.coordinates[0]) + ',' + str(edr_query.coords.coordinates[0]) + ')'
+
+print(select)
 ```
 
-## Get the collection name
-
+## EDR datetime Example
 ```python
-edr_query.collection_name
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
+                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
+                           'parameter2&f=geoJSON&crs=crs86&z=all')
+
+select = 'SELECT * FROM observations'
+
+if edr_query.datetime.is_set:
+    if edr_query.datetime.is_interval:
+        select += ' date BETWEEN ' + str(edr_query.datetime.interval_from.timestamp()) + ' AND ' + str(edr_query.datetime.interval_to.timestamp())
+    else:
+        select += ' date = ' + str(edr_query.datetime.exact.timestamp()) + ')'
+
+print(select)
 ```
 
-returns string of the requested collection
-
-## Get the query type
-
+## EDR parameter-name Example
 ```python
-edr_query.query_type
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
+                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
+                           'parameter2&f=geoJSON&crs=crs86&z=all')
+
+select = 'SELECT ' + ','.join(edr_query.parameter_name.list) + ' FROM observations'
+
+print(select)
 ```
 
-returns string of the query type
-
-## Get the requested output format
-
+## EDR z Parameter Example
 ```python
-edr_query.format
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
+                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
+                           'parameter2&f=geoJSON&crs=crs86&z=all')
+
+select = 'SELECT * FROM observations'
+
+if edr_query.z.is_set:
+    if edr_query.z.is_interval:
+        select += ' height BETWEEN ' + str(edr_query.z.interval_from) + ' AND ' + str(edr_query.z.interval_to)
+    if edr_query.z.is_list:
+        select += ' height IN (' + ','.join(map(str, edr_query.z.list)) + ')'
+
+print(select)
 ```
-
-returns string of the requested output format
-
-## Get the parameter names
-
-```python
-if edr_query.parameter_name is not None:
-    print('SELECT ' + ",".join(edr_query.parameter_name) + ' from observations')
-else:
-    print('SELECT * from observations')
-```
-
-returns list of requested parameters
-
-## Get the datetime
-
-```python
-if edr.is_datetime_interval:
-    edr.datetime_from
-    edr.datetime_to
-else:
-    edr.datetime.timestamp()  # e.g. gets the timestamp of the datetime
-```
-
-returns datetime object of the requested datetime
-
-## Get the get coords type
-
-```python
-edr.coords_type
-```
-returns the well-know text coords type
-
-## Get the coords coordinates
-
-```python
-edr.coords_coordinates
-```
-
-returns the well know text coordinates request
-
-## Get the coords dictionary
-
-```python
-edr.coords
-```
-
-returns dictionary of the well known text query request
-
-
-## Get the CRS
-
-```python
-edr.crs
-```
-
-returns string for the requested CRS
-
-## Get instances id
-
-```python
-edr.instances_id
-```
-
-returns string of the instances id
-
-## Get items id
-
-```python
-edr.items_id
-```
-
-returns string of the items id
-
-## Get locations id
-
-```python
-edr.locations_id
-```
-
-returns string of the locations id
-
-## Get z height
-
-```python
-edr.z
-```
-
-returns float of the height

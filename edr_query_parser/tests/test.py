@@ -80,10 +80,13 @@ class TestEDRQueryParserMethods(unittest.TestCase):
                 'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=parameter1,%20parameter2, parameter3',
                 'expected': ['parameter1', 'parameter2', 'parameter3']
             },
-            {'url': 'https://somewhere.com/collections/my_collection/position', 'expected': None},
+            {
+                'url': 'https://somewhere.com/collections/my_collection/position',
+                'expected': 'could not convert parameter to a list'
+            },
             {
                 'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=&something=1',
-                'expected': None
+                'expected': 'could not convert parameter to a list'
             },
             {
                 'url': 'https://somewhere.com/collections/my_collection/locations/my_locations?parameter-name=parameter1',
@@ -92,8 +95,14 @@ class TestEDRQueryParserMethods(unittest.TestCase):
         ]
 
         for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.parameter_name, test_dic['expected'])
+            try:
+                edr = EDRQueryParser(test_dic['url'])
+                self.assertEqual(edr.parameter_name.list, test_dic['expected'])
+            except ValueError as raisedException:
+                self.assertEqual(
+                    test_dic['expected'],
+                    str(raisedException)
+                )
 
     def test_get_date(self):
         test_data = [
@@ -109,7 +118,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime, test_dic['expected'])
+            self.assertEqual(edr.datetime.exact, test_dic['expected'])
 
     def test_get_date_raise_exception(self):
         test_data = [
@@ -126,7 +135,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
             with self.assertRaises(ValueError) as error:
-                edr.datetime
+                edr.datetime.exact
             self.assertEqual(str(error.exception), test_dic['error_message'])
 
     def test_get_date_from_raise_exception(self):
@@ -144,14 +153,15 @@ class TestEDRQueryParserMethods(unittest.TestCase):
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
             with self.assertRaises(ValueError) as error:
-                edr.datetime_from
+                edr.datetime.interval_from
             self.assertEqual(str(error.exception), test_dic['error_message'])
 
     def test_is_date_interval(self):
         test_data = [
             {
                 'url': 'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
-                'expected': True},
+                'expected': True
+            },
             {
                 'url': 'https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
                 'expected': True
@@ -172,7 +182,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.is_datetime_interval, test_dic['expected'])
+            self.assertEqual(edr.datetime.is_interval, test_dic['expected'])
 
     def test_get_datetime_from(self):
         test_data = [
@@ -188,7 +198,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime_from, test_dic['expected'])
+            self.assertEqual(edr.datetime.interval_from, test_dic['expected'])
 
     def test_get_datetime_to(self):
         test_data = [
@@ -204,7 +214,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime_to, test_dic['expected'])
+            self.assertEqual(edr.datetime.interval_to, test_dic['expected'])
 
     def test_get_datetime(self):
         test_data = [
@@ -220,7 +230,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime, test_dic['expected'])
+            self.assertEqual(edr.datetime.exact, test_dic['expected'])
 
     def test_get_crs(self):
         test_data = [
@@ -239,7 +249,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.crs, test_dic['expected'])
+            self.assertEqual(edr.crs.value, test_dic['expected'])
 
     def test_get_format(self):
         test_data = [
@@ -258,7 +268,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.format, test_dic['expected'])
+            self.assertEqual(edr.format.value, test_dic['expected'])
 
     def test_get_coords(self):
         test_data = [
@@ -276,7 +286,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.coords, test_dic['expected'])
+            self.assertEqual(edr.coords.wkt, test_dic['expected'])
 
     def test_get_coords_type(self):
         test_data = [
@@ -291,7 +301,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.coords_type, test_dic['expected'])
+            self.assertEqual(edr.coords.coords_type, test_dic['expected'])
 
     def test_get_coords_coordinates(self):
         test_data = [
@@ -305,7 +315,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.coords_coordinates, test_dic['expected'])
+            self.assertEqual(edr.coords.coordinates, test_dic['expected'])
 
     def test_get_location_id(self):
         test_data = [
@@ -406,7 +416,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.is_z_interval, test_dic['expected'])
+            self.assertEqual(edr.z.is_interval, test_dic['expected'])
 
     def test_is_z_list(self):
         test_data = [
@@ -438,40 +448,36 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.is_z_list, test_dic['expected'])
+            self.assertEqual(edr.z.is_list, test_dic['expected'])
 
     def test_get_z_list(self):
         test_data = [
             {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12/13',
-                'expected': 'unable to create z list'
-            },
-            {
                 'url': 'https://somewhere.com/collections/my_collection/position?z=500,400',
                 'expected': [500, 400]
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': 'unable to create z list'
             },
             {
                 'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
                 'expected': [12, 23, 34]
             },
             {
+                'url': 'https://somewhere.com/collections/my_collection/position?z=23/45',
+                'expected': 'could not convert parameter to a list'
+            },
+            {
                 'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': 'unable to create z list'
+                'expected': 'could not convert parameter to a list'
             },
             {
                 'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': 'unable to create z list'
+                'expected': 'could not convert parameter to a list'
             },
         ]
 
         for test_dic in test_data:
             try:
                 edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z_list, test_dic['expected'])
+                self.assertEqual(edr.z.list, test_dic['expected'])
             except ValueError as raisedException:
                 self.assertEqual(
                     test_dic['expected'],
@@ -526,7 +532,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
         for test_dic in test_data:
             try:
                 edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z, test_dic['expected'])
+                self.assertEqual(edr.z.float, test_dic['expected'])
             except ValueError as raisedException:
                 self.assertEqual(
                     test_dic['expected'],
@@ -565,7 +571,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
         for test_dic in test_data:
             try:
                 edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z_from, test_dic['expected'])
+                self.assertEqual(edr.z.interval_from, test_dic['expected'])
             except ValueError as raisedException:
                 self.assertEqual(
                     test_dic['expected'],
@@ -603,7 +609,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
         for test_dic in test_data:
             try:
                 edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z_to, test_dic['expected'])
+                self.assertEqual(edr.z.interval_to, test_dic['expected'])
             except ValueError as raisedException:
                 self.assertEqual(
                     test_dic['expected'],
@@ -644,7 +650,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
 
         for test_dic in test_data:
             edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.is_z_all, test_dic['expected'])
+            self.assertEqual(edr.z.is_all, test_dic['expected'])
 
 
 if __name__ == '__main__':

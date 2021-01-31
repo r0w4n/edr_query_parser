@@ -18,13 +18,9 @@ class EDRQueryParser:
                 return self.url_list[collections_index + 1]
         return None
 
-    def _get_split_parameter(self, parameter, index=None):
+    def _get_parameter(self, parameter):
         if parameter in self.query_dic:
-            if index is None:
-                return self.query_dic[parameter]
-            if parameter in self.query_dic and '/' in self.query_dic[parameter]:
-                return self.query_dic[parameter].split('/')[index]
-            return None
+            return self.query_dic[parameter]
         return None
 
     @property
@@ -45,63 +41,6 @@ class EDRQueryParser:
             raise ValueError('unsupported query type found in url')
 
     @property
-    def parameter_name(self):
-        if 'parameter-name' in self.query_dic:
-            return [parameter.strip(' ') for parameter in self.query_dic['parameter-name'].split(',')]
-        return None
-
-    @property
-    def datetime_from(self):
-        try:
-            return isoparse(self._get_split_parameter('datetime', 0))
-        except ValueError:
-            raise ValueError('Datetime format not recognised')
-
-    @property
-    def datetime_to(self):
-        try:
-            return isoparse(self._get_split_parameter('datetime', 1))
-        except ValueError:
-            raise ValueError('Datetime format not recognised')
-
-    @property
-    def datetime(self):
-        try:
-            return isoparse(self._get_split_parameter('datetime'))
-        except ValueError:
-            raise ValueError('Datetime format not recognised')
-
-    @property
-    def is_datetime_interval(self):
-        if 'datetime' in self.query_dic:
-            return '/' in self.query_dic.get('datetime')
-        return False
-
-    @property
-    def format(self):
-        if 'f' in self.query_dic:
-            return self.query_dic.get('f')
-        return None
-
-    @property
-    def coords(self):
-        return wkt.loads(self.query_dic.get('coords'))
-
-    @property
-    def coords_type(self):
-        return self.coords['type']
-
-    @property
-    def coords_coordinates(self):
-        return self.coords['coordinates']
-
-    @property
-    def crs(self):
-        if 'crs' in self.query_dic:
-            return self.query_dic.get('crs')
-        return None
-
-    @property
     def items_id(self):
         return self._get_id('items')
 
@@ -114,41 +53,146 @@ class EDRQueryParser:
         return self._get_id('instances')
 
     @property
+    def format(self):
+        return Parameter(self._get_parameter('f'))
+
+    @property
+    def coords(self):
+        return Coords(self._get_parameter('coords'))
+
+    @property
+    def crs(self):
+        return Parameter(self._get_parameter('crs'))
+
+    @property
+    def parameter_name(self):
+        return ParameterWithList(self._get_parameter('parameter-name'))
+
+    @property
+    def datetime(self):
+        return DateTime(self._get_parameter('datetime'))
+
+    @property
     def z(self):
+        return Z(self._get_parameter('z'))
+
+
+class Parameter:
+    def __init__(self, value):
+        self.value = value
+
+    @property
+    def is_set(self):
+        return self.value is not None
+
+
+class ParameterWithList(Parameter):
+    @property
+    def list(self):
         try:
-            return float(self._get_split_parameter('z'))
+            return [parameter.strip(' ') for parameter in self.value.split(',')]
+        except (ValueError, AttributeError):
+            raise ValueError('could not convert parameter to a list')
+
+    @property
+    def is_list(self):
+        return self.is_set and ',' in self.value
+
+
+class ParameterWithInterval(Parameter):
+
+    def _split(self, index=None):
+        if self.is_set:
+            if '/' in self.value:
+                return self.value.split('/')[index]
+            return None
+        return None
+
+    @property
+    def is_interval(self):
+        return self.value is not None and '/' in self.value
+
+    @property
+    def interval_from(self):
+        try:
+            return self._split(0)
+        except (ValueError, TypeError):
+            raise ValueError('unable to get interval from value')
+
+    @property
+    def interval_to(self):
+        try:
+            return self._split(1)
+        except (ValueError, TypeError):
+            raise ValueError('unable to get interval to value')
+
+
+class DateTime(ParameterWithInterval):
+    @property
+    def interval_from(self):
+        try:
+            return isoparse(super().interval_from)
+        except ValueError:
+            raise ValueError('Datetime format not recognised')
+
+    @property
+    def interval_to(self):
+        try:
+            return isoparse(super().interval_to)
+        except ValueError:
+            raise ValueError('Datetime format not recognised')
+
+    @property
+    def exact(self):
+        try:
+            return isoparse(self.value)
+        except ValueError:
+            raise ValueError('Datetime format not recognised')
+
+
+class Z(ParameterWithList, ParameterWithInterval):
+    @property
+    def float(self):
+        try:
+            return float(self.value)
         except (TypeError, ValueError):
             raise ValueError('z can not be cast to float')
 
     @property
-    def z_list(self):
+    def interval_from(self):
         try:
-            return list(map(float, [parameter.strip(' ') for parameter in self.query_dic['z'].split(',')]))
-        except (ValueError, KeyError):
-            raise ValueError('unable to create z list')
-
-    @property
-    def z_from(self):
-        try:
-            return float(self._get_split_parameter('z', 0))
-        except (ValueError, TypeError):
+            return float(super().interval_from)
+        except TypeError:
             raise ValueError('unable to get z from value')
 
     @property
-    def z_to(self):
+    def interval_to(self):
         try:
-            return float(self._get_split_parameter('z', 1))
-        except (ValueError, TypeError):
+            return float(super().interval_to)
+        except TypeError:
             raise ValueError('unable to get z to value')
 
     @property
-    def is_z_interval(self):
-        return 'z' in self.query_dic and'/' in self.query_dic.get('z')
+    def is_all(self):
+        return self.is_set and self.value.lower() == 'all'
 
     @property
-    def is_z_list(self):
-        return 'z' in self.query_dic and ',' in self.query_dic.get('z')
+    def list(self):
+        try:
+            return list(map(float, super().list))
+        except ValueError:
+            raise ValueError('could not convert parameter to a list')
+
+
+class Coords(Parameter):
+    @property
+    def wkt(self):
+        return wkt.loads(self.value)
 
     @property
-    def is_z_all(self):
-        return 'z' in self.query_dic and self.query_dic['z'].lower() == 'all'
+    def coords_type(self):
+        return self.wkt['type']
+
+    @property
+    def coordinates(self):
+        return self.wkt['coordinates']
