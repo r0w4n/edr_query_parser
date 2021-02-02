@@ -3,39 +3,30 @@ from dateutil.parser import isoparse
 from enum import Enum
 from geomet import wkt
 
+
 class EDRQueryParser:
     def __init__(self, url):
-        self.url_list = urlsplit(url).path.split('/')
-        self.url_list.pop(0)
-        self.url_list = list(filter(None, self.url_list))
+        self.url_list = list(filter(None, urlsplit(url).path.split('/')))
         self.query_dic = {str(key): ''.join(value) for key, value in parse_qs(urlsplit(url).query).items()}
 
     def _get_id(self, query_id):
         if self.query_type == query_id:
-            collections_index = self.url_list.index(query_id)
-            if len(self.url_list) > collections_index + 1:
-                return self.url_list[collections_index + 1]
-        return None
-
-    def _get_parameter(self, parameter):
-        if parameter in self.query_dic:
-            return self.query_dic[parameter]
+            query_index = self.url_list.index(query_id)
+            if len(self.url_list) > query_index + 1:
+                return self.url_list[query_index + 1]
         return None
 
     @property
     def collection_name(self):
-        collections_index = self.url_list.index('collections')
-
-        if len(self.url_list) != collections_index + 2:
-            return self.url_list[collections_index + 1]
+        if len(self.url_list) != self.url_list.index('collections') + 2:
+            return self.url_list[self.url_list.index('collections') + 1]
         raise ValueError('collection name not found in url')
 
     @property
     def query_type(self):
         query_type = Enum('query_type', 'position radius area cube trajectory corridor items locations instances')
-        collections_index = self.url_list.index('collections')
         try:
-            return query_type[self.url_list[collections_index + 2]].name
+            return query_type[self.url_list[self.url_list.index('collections') + 2]].name
         except KeyError:
             raise ValueError('unsupported query type found in url')
 
@@ -53,27 +44,27 @@ class EDRQueryParser:
 
     @property
     def format(self):
-        return Parameter(self._get_parameter('f'))
+        return Parameter(self.query_dic.get('f'))
 
     @property
     def coords(self):
-        return Coords(self._get_parameter('coords'))
+        return Coords(self.query_dic.get('coords'))
 
     @property
     def crs(self):
-        return Parameter(self._get_parameter('crs'))
+        return Parameter(self.query_dic.get('crs'))
 
     @property
     def parameter_name(self):
-        return ParameterWithList(self._get_parameter('parameter-name'))
+        return ParameterWithList(self.query_dic.get('parameter-name'))
 
     @property
     def datetime(self):
-        return DateTime(self._get_parameter('datetime'))
+        return DateTime(self.query_dic.get('datetime'))
 
     @property
     def z(self):
-        return Z(self._get_parameter('z'))
+        return Z(self.query_dic.get('z'))
 
 
 class Parameter:
@@ -99,12 +90,9 @@ class ParameterWithList(Parameter):
 
 
 class ParameterWithInterval(Parameter):
-
     def _split(self, index=None):
-        if self.is_set:
-            if '/' in self.value:
-                return self.value.split('/')[index]
-            return None
+        if self.is_set and '/' in self.value:
+            return self.value.split('/')[index]
         return None
 
     @property
