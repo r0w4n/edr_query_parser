@@ -4,17 +4,25 @@ from enum import Enum
 from geomet import wkt
 
 
+def format_date(date):
+    try:
+        return isoparse(date)
+    except ValueError:
+        raise ValueError('Datetime format not recognised')
+
+
 class EDRQueryParser:
+    QUERY_TYPES = Enum('query_type', 'position radius area cube trajectory corridor items locations instances')
+
     def __init__(self, url):
         self.url_list = list(filter(None, urlsplit(url).path.split('/')))
         self.query_dic = {str(key): ''.join(value) for key, value in parse_qs(urlsplit(url).query).items()}
 
     def _get_id(self, query_id):
-        if self.query_type == query_id:
-            query_index = self.url_list.index(query_id)
-            if len(self.url_list) > query_index + 1:
-                return self.url_list[query_index + 1]
-        return None
+        try:
+            return self.url_list[self.url_list.index(query_id) + 1]
+        except IndexError:
+            return None
 
     @property
     def collection_name(self):
@@ -24,9 +32,8 @@ class EDRQueryParser:
 
     @property
     def query_type(self):
-        query_type = Enum('query_type', 'position radius area cube trajectory corridor items locations instances')
         try:
-            return query_type[self.url_list[self.url_list.index('collections') + 2]].name
+            return self.QUERY_TYPES[self.url_list[self.url_list.index('collections') + 2]].name
         except KeyError:
             raise ValueError('unsupported query type found in url')
 
@@ -117,24 +124,15 @@ class ParameterWithInterval(Parameter):
 class DateTime(ParameterWithInterval):
     @property
     def interval_from(self):
-        try:
-            return isoparse(super().interval_from)
-        except ValueError:
-            raise ValueError('Datetime format not recognised')
+        return format_date(super().interval_from)
 
     @property
     def interval_to(self):
-        try:
-            return isoparse(super().interval_to)
-        except ValueError:
-            raise ValueError('Datetime format not recognised')
+        return format_date(super().interval_to)
 
     @property
     def exact(self):
-        try:
-            return isoparse(self.value)
-        except ValueError:
-            raise ValueError('Datetime format not recognised')
+        return format_date(self.value)
 
 
 class Z(ParameterWithList, ParameterWithInterval):

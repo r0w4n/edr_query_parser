@@ -44,7 +44,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
             {'url': 'https://somewhere.com/collections/my_collection/instances?', 'expected': 'instances'},
             {'url': 'https://somewhere.com/collections/metar/locations/EGLL?', 'expected': 'locations'},
             {'url': 'https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z?', 'expected': 'items'},
-
+            #{'url': 'https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z/radisu?', 'expected': 'items'},
         ]
 
         for test_dic in test_data:
@@ -341,7 +341,7 @@ class TestEDRQueryParserMethods(unittest.TestCase):
             edr = EDRQueryParser(test_dic['url'])
             self.assertEqual(edr.locations_id, test_dic['expected'])
 
-    def test_get_location_id(self):
+    def test_get_items_id(self):
         test_data = [
             {
                 'url': 'https://somewhere.com/collections/my_collection/items/my_item_id/',
