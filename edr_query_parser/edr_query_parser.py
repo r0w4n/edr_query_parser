@@ -12,7 +12,7 @@ def format_date(date):
 
 
 class EDRQueryParser:
-    QUERY_TYPES = Enum('query_type', 'position radius area cube trajectory corridor items locations instances')
+    QUERY_TYPES = Enum('query_type', 'position radius area cube trajectory corridor items instances locations')
 
     def __init__(self, url):
         self.url_list = list(filter(None, urlsplit(url).path.split('/')))
@@ -73,6 +73,10 @@ class EDRQueryParser:
     def z(self):
         return Z(self.query_dic.get('z'))
 
+    @property
+    def bbox(self):
+        return ParameterWithFloatList(self.query_dic.get('bbox'))
+
 
 class Parameter:
     def __init__(self, value):
@@ -94,6 +98,15 @@ class ParameterWithList(Parameter):
     @property
     def is_list(self):
         return self.is_set and ',' in self.value
+
+
+class ParameterWithFloatList(ParameterWithList):
+    @property
+    def list(self):
+        try:
+            return list(map(float, super().list))
+        except ValueError:
+            raise ValueError('could not convert parameter to a list')
 
 
 class ParameterWithInterval(Parameter):
@@ -135,7 +148,7 @@ class DateTime(ParameterWithInterval):
         return format_date(self.value)
 
 
-class Z(ParameterWithList, ParameterWithInterval):
+class Z(ParameterWithFloatList, ParameterWithInterval):
     @property
     def float(self):
         try:
@@ -160,13 +173,6 @@ class Z(ParameterWithList, ParameterWithInterval):
     @property
     def is_all(self):
         return self.is_set and self.value.lower() == 'all'
-
-    @property
-    def list(self):
-        try:
-            return list(map(float, super().list))
-        except ValueError:
-            raise ValueError('could not convert parameter to a list')
 
 
 class Coords(Parameter):
