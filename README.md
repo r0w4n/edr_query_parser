@@ -35,6 +35,7 @@ else:
 ```
 
 ## EDR coords Example
+The EDR query parser returns a [WKT](https://github.com/geomet/geomet) object
 ```python
 from edr_query_parser import EDRQueryParser
 
