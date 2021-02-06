@@ -1,658 +1,346 @@
-import unittest
+import pytest
 from edr_query_parser.edr_query_parser import EDRQueryParser
 from dateutil.parser import isoparse
 
 
-class TestEDRQueryParserMethods(unittest.TestCase):
-    def test_get_collection(self):
-        test_data = [
-            {'url': 'https://somewhere.com/collections/my_collection/corridor?', 'expected': 'my_collection'},
-            {'url': 'https://somewhere.com/collections/collections/position?', 'expected': 'collections'},
-            {'url': 'https://somewhere.com/collections/observations/position?', 'expected': 'observations'},
-        ]
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/corridor?', 'my_collection'),
+    ('https://somewhere.com/collections/collections/position?', 'collections'),
+    ('https://somewhere.com/collections/observations/position?', 'observations'),
+    ('https://somewhere.com/collections/position?', 'collection name not found in url'),
+    ('https://somewhere.com/collections/items?', 'collection name not found in url'),
+])
+def test_collection_name(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.collection_name == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
 
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.collection_name, test_dic['expected'])
-
-    def test_get_collection_raise_exception(self):
-        test_data = [
-            {'url': 'https://somewhere.com/v1/collections/position?'},
-            {'url': 'https://somewhere.com/collections/position?'},
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-
-            with self.assertRaises(ValueError) as cm:
-                edr.collection_name
-            self.assertEqual(
-                'collection name not found in url',
-                str(cm.exception)
-            )
-
-    def test_get_query_type(self):
-        test_data = [
-            {'url': 'https://somewhere.com/collections/my_collection/position?', 'expected': 'position'},
-            {'url': 'https://somewhere.com/collections/my_collection/radius?', 'expected': 'radius'},
-            {'url': 'https://somewhere.com/collections/my_collection/area?', 'expected': 'area'},
-            {'url': 'https://somewhere.com/collections/my_collection/cube?', 'expected': 'cube'},
-            {'url': 'https://somewhere.com/collections/my_collection/trajectory?', 'expected': 'trajectory'},
-            {'url': 'https://somewhere.com/collections/my_collection/corridor?', 'expected': 'corridor'},
-            {'url': 'https://somewhere.com/collections/my_collection/items?', 'expected': 'items'},
-            {'url': 'https://somewhere.com/collections/my_collection/locations?', 'expected': 'locations'},
-            {'url': 'https://somewhere.com/collections/my_collection/instances?', 'expected': 'instances'},
-            {'url': 'https://somewhere.com/collections/metar/locations/EGLL?', 'expected': 'locations'},
-            {'url': 'https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z?', 'expected': 'items'},
-            #{'url': 'https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z/radisu?', 'expected': 'items'},
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.query_type, test_dic['expected'])
-
-    def test_get_query_type_raise_exception(self):
-        test_data = [
-            {'url': 'https://somewhere.com/collections/my_collection/not_a_query_type?'},
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-
-            with self.assertRaises(ValueError) as cm:
-                edr.query_type
-            self.assertEqual(
-                'unsupported query type found in url',
-                str(cm.exception)
-            )
-
-    def test_get_parameter_name(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=parameter1,parameter2',
-                'expected': ['parameter1', 'parameter2']
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=parameter1',
-                'expected': ['parameter1']
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=parameter1,%20parameter2, parameter3',
-                'expected': ['parameter1', 'parameter2', 'parameter3']
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': 'could not convert parameter to a list'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=&something=1',
-                'expected': 'could not convert parameter to a list'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/locations/my_locations?parameter-name=parameter1',
-                'expected': ['parameter1']
-            },
-        ]
-
-        for test_dic in test_data:
-            try:
-                edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.parameter_name.list, test_dic['expected'])
-            except ValueError as raisedException:
-                self.assertEqual(
-                    test_dic['expected'],
-                    str(raisedException)
-                )
-
-    def test_get_date(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
-                'expected': isoparse('2018-02-12T23:20:52Z')
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00',
-                'expected': isoparse('2019-09-07T15:50-04:00')
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime.exact, test_dic['expected'])
-
-    def test_get_date_raise_exception(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=not_a_date',
-                'error_message': 'Datetime format not recognised'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=23/5/1920',
-                'error_message': 'Datetime format not recognised'
-            }
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            with self.assertRaises(ValueError) as error:
-                edr.datetime.exact
-            self.assertEqual(str(error.exception), test_dic['error_message'])
-
-    def test_get_date_from_raise_exception(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=not_a_date/2018-03-12T23%3A20%3A52Z',
-                'error_message': 'Datetime format not recognised'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=3422-23423-234/2018-03-12T23%3A20%3A52Z',
-                'error_message': 'Datetime format not recognised'
-            }
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            with self.assertRaises(ValueError) as error:
-                edr.datetime.interval_from
-            self.assertEqual(str(error.exception), test_dic['error_message'])
-
-    def test_is_date_interval(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': False
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime.is_interval, test_dic['expected'])
-
-    def test_get_datetime_from(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
-                'expected': isoparse('2018-02-12T23:20:52Z')
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
-                'expected': isoparse('2019-09-07T15:50-04:00')
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime.interval_from, test_dic['expected'])
-
-    def test_get_datetime_to(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
-                'expected': isoparse('2018-03-12T23:20:52Z')
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
-                'expected': isoparse('2019-09-07T15:50-05:00')
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime.interval_to, test_dic['expected'])
-
-    def test_get_datetime(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
-                'expected': isoparse('2018-02-12T23:20:52Z')
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00',
-                'expected': isoparse('2019-09-07T15:50-04:00')
-            }
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.datetime.exact, test_dic['expected'])
-
-    def test_get_crs(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?crs=WGS84',
-                'expected': 'WGS84'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position', 'expected': None
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=&something=1',
-                'expected': None
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.crs.value, test_dic['expected'])
-
-    def test_get_format(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?f=geoJson',
-                'expected': 'geoJson'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=&something=1&f=CoverageJSON',
-                'expected': 'CoverageJSON'},
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?parameter-name=&something=1',
-                'expected': None
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.format.value, test_dic['expected'])
-
-    def test_get_coords(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
-                'expected': {'type': 'Point', 'coordinates': [0.0, 51.48]}
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
-                'expected': {'type': 'MultiPoint',
-                             'coordinates': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1],
-                                             [51.5, -0.1]]}
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.coords.wkt, test_dic['expected'])
-
-    def test_get_coords_type(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
-                'expected': 'Point'},
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
-                'expected': 'MultiPoint'
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.coords.coords_type, test_dic['expected'])
-
-    def test_get_coords_coordinates(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
-                'expected': [0.0, 51.48]},
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
-                'expected': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.coords.coordinates, test_dic['expected'])
-
-    def test_get_location_id(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/locations/my_location_id/',
-                'expected': 'my_location_id'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/locations/', 'expected': None
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/locations', 'expected': None
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/locations/my_locations?parameter-name'
-                       '=&something=1',
-                'expected': 'my_locations'
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.locations_id, test_dic['expected'])
-
-    def test_get_items_id(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/items/my_item_id/',
-                'expected': 'my_item_id'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/items/', 'expected': None
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/items', 'expected': None
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/items/my_item?parameter-name'
-                       '=&something=1',
-                'expected': 'my_item'
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.items_id, test_dic['expected'])
-
-    def test_get_instances_id(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/instances/my_instances/',
-                'expected': 'my_instances'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/instances/', 'expected': None
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/instances', 'expected': None
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/instances/my_instances?parameter-name'
-                       '=&something=1',
-                'expected': 'my_instances'
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.instances_id, test_dic['expected'])
-
-    def test_is_z_interval(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12/13',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=500/400',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': False
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.z.is_interval, test_dic['expected'])
-
-    def test_is_z_list(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12/13',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=500,400',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': False
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.z.is_list, test_dic['expected'])
-
-    def test_get_z_list(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=500,400',
-                'expected': [500, 400]
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
-                'expected': [12, 23, 34]
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=23/45',
-                'expected': 'could not convert parameter to a list'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': 'could not convert parameter to a list'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': 'could not convert parameter to a list'
-            },
-        ]
-
-        for test_dic in test_data:
-            try:
-                edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z.list, test_dic['expected'])
-            except ValueError as raisedException:
-                self.assertEqual(
-                    test_dic['expected'],
-                    str(raisedException)
-                )
-
-    def test_get_z(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12',
-                'expected': 12
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': 'z can not be cast to float'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12.5',
-                'expected': 12.5
-            },
-
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=500,400',
-                'expected': 'z can not be cast to float'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': 'z can not be cast to float'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=all',
-                'expected': 'z can not be cast to float'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=ALL',
-                'expected': 'z can not be cast to float'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
-                'expected': 'z can not be cast to float'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': 'z can not be cast to float'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': 'z can not be cast to float'
-            },
-        ]
-
-        for test_dic in test_data:
-            try:
-                edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z.float, test_dic['expected'])
-            except ValueError as raisedException:
-                self.assertEqual(
-                    test_dic['expected'],
-                    str(raisedException)
-                )
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', 'position'),
+    ('https://somewhere.com/collections/my_collection/radius?', 'radius'),
+    ('https://somewhere.com/collections/my_collection/area?', 'area'),
+    ('https://somewhere.com/collections/my_collection/cube?', 'cube'),
+    ('https://somewhere.com/collections/my_collection/trajectory?', 'trajectory'),
+    ('https://somewhere.com/collections/my_collection/corridor?', 'corridor'),
+    ('https://somewhere.com/collections/my_collection/items?', 'items'),
+    ('https://somewhere.com/collections/my_collection/locations?', 'locations'),
+    ('https://somewhere.com/collections/my_collection/instances?', 'instances'),
+    ('https://somewhere.com/collections/metar/locations/EGLL?', 'locations'),
+    ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z?', 'items'),
+    # ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z/radisu?', 'items'),
+    ('https://somewhere.com/collections/my_collection/not_a_query_type?', 'unsupported query type found in url'),
+])
+def test_query_type(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
 
 
-    def test_get_z_from(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12/13',
-                'expected': 12
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=500,400',
-                'expected': 'unable to get z from value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': 'unable to get z from value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
-                'expected': 'unable to get z from value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': 'unable to get z from value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': 'unable to get z from value'
-            },
-        ]
-
-        for test_dic in test_data:
-            try:
-                edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z.interval_from, test_dic['expected'])
-            except ValueError as raisedException:
-                self.assertEqual(
-                    test_dic['expected'],
-                    str(raisedException)
-                )
-
-    def test_get_z_to(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12/13',
-                'expected': 13
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=500,400',
-                'expected': 'unable to get z to value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': 'unable to get z to value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
-                'expected': 'unable to get z to value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': 'unable to get z to value'
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': 'unable to get z to value'
-            },
-        ]
-
-        for test_dic in test_data:
-            try:
-                edr = EDRQueryParser(test_dic['url'])
-                self.assertEqual(edr.z.interval_to, test_dic['expected'])
-            except ValueError as raisedException:
-                self.assertEqual(
-                    test_dic['expected'],
-                    str(raisedException)
-                )
-
-    def test_is_z_all(self):
-        test_data = [
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=all',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=All',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=ALL',
-                'expected': True
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=12,23,34',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position?z=',
-                'expected': False
-            },
-            {
-                'url': 'https://somewhere.com/collections/my_collection/position',
-                'expected': False
-            },
-        ]
-
-        for test_dic in test_data:
-            edr = EDRQueryParser(test_dic['url'])
-            self.assertEqual(edr.z.is_all, test_dic['expected'])
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?parameter-name=parameter1,parameter2',
+     ['parameter1', 'parameter2']),
+    ('https://somewhere.com/collections/my_collection/position?parameter-name=parameter1', ['parameter1']),
+    ('https://somewhere.com/collections/my_collection/position?parameter-name=parameter1,%20parameter2, parameter3',
+     ['parameter1', 'parameter2', 'parameter3']),
+    ('https://somewhere.com/collections/my_collection/position', 'could not convert parameter to a list'),
+    ('https://somewhere.com/collections/my_collection/position?parameter-name=&something=1',
+     'could not convert parameter to a list'),
+    ('https://somewhere.com/collections/my_collection/locations/my_locations?parameter-name=parameter1',
+     ['parameter1']),
+])
+def test_parameter_name(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.parameter_name.list == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
 
 
-if __name__ == '__main__':
-    unittest.main()
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/items/my_item_id/', 'my_item_id'),
+    ('https://somewhere.com/collections/my_collection/items/', None),
+    ('https://somewhere.com/collections/my_collection/items', None),
+    ('https://somewhere.com/collections/my_collection/items/my_item?parameter-name=&something=1', 'my_item'),
+])
+def test_items_id(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.items_id == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/locations/my_location/', 'my_location'),
+    ('https://somewhere.com/collections/my_collection/locations/', None),
+    ('https://somewhere.com/collections/my_collection/locations', None),
+    ('https://somewhere.com/collections/my_collection/locations/my_location?parameter-name=&something=1',
+     'my_location'),
+])
+def test_locations_id(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.locations_id == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/instances/my_instance/', 'my_instance'),
+    ('https://somewhere.com/collections/my_collection/instances/', None),
+    ('https://somewhere.com/collections/my_collection/instances', None),
+    ('https://somewhere.com/collections/my_collection/instances/my_instance?parameter-name=&something=1',
+     'my_instance'),
+])
+def test_instances_id(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.instances_id == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?f=geoJson', 'geoJson'),
+    ('https://somewhere.com/collections/my_collection/instances/?f=CoverageJSON', 'CoverageJSON'),
+    ('https://somewhere.com/collections/my_collection/instances', None),
+    ('https://somewhere.com/collections/my_collection/instances?f=', None),
+])
+def test_format_value(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.format.value == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?crs=WGS84', 'WGS84'),
+    ('https://somewhere.com/collections/my_collection/instances', None),
+    ('https://somewhere.com/collections/my_collection/instances?crs=', None),
+])
+def test_crs_value(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.crs.value == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?crs=WGS84', 'WGS84'),
+    ('https://somewhere.com/collections/my_collection/instances', None),
+    ('https://somewhere.com/collections/my_collection/instances?crs=', None),
+])
+def test_crs_value(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.crs.value == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
+     {'type': 'Point', 'coordinates': [0.0, 51.48]}),
+    ('https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
+     {'type': 'MultiPoint', 'coordinates': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]})
+])
+def test_coords_wkt(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.coords.wkt == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?z=12', 12),
+    ('https://somewhere.com/collections/my_collection/position?z=All', 'z can not be cast to float'),
+    ('https://somewhere.com/collections/my_collection/position?z=12.5', 12.5),
+    ('https://somewhere.com/collections/my_collection/position?z=500,400', 'z can not be cast to float'),
+    ('https://somewhere.com/collections/my_collection/position?z=All', 'z can not be cast to float'),
+    ('https://somewhere.com/collections/my_collection/position?z=all', 'z can not be cast to float'),
+    ('https://somewhere.com/collections/my_collection/position?z=ALL', 'z can not be cast to float'),
+    ('https://somewhere.com/collections/my_collection/position?z=12,23,34', 'z can not be cast to float'),
+    ('https://somewhere.com/collections/my_collection/position?z=', 'z can not be cast to float'),
+    ('https://somewhere.com/collections/my_collection/position', 'z can not be cast to float'),
+])
+def test_z_float(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.z.float == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?z=12/13', 12),
+    ('https://somewhere.com/collections/my_collection/position?z=500,400', 'unable to get z from value'),
+    ('https://somewhere.com/collections/my_collection/position?z=All', 'unable to get z from value'),
+    ('https://somewhere.com/collections/my_collection/position?z=12,23,34', 'unable to get z from value'),
+    ('https://somewhere.com/collections/my_collection/position?z=', 'unable to get z from value'),
+    ('https://somewhere.com/collections/my_collection/position', 'unable to get z from value'),
+])
+def test_z_interval_from(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.z.interval_from == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?z=12/13', 13),
+    ('https://somewhere.com/collections/my_collection/position?z=500,400', 'unable to get z to value'),
+    ('https://somewhere.com/collections/my_collection/position?z=All', 'unable to get z to value'),
+    ('https://somewhere.com/collections/my_collection/position?z=12,23,34', 'unable to get z to value'),
+    ('https://somewhere.com/collections/my_collection/position?z=', 'unable to get z to value'),
+    ('https://somewhere.com/collections/my_collection/position', 'unable to get z to value'),
+])
+def test_z_interval_to(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.z.interval_to == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?z=12', False),
+    ('https://somewhere.com/collections/my_collection/position?z=all', True),
+    ('https://somewhere.com/collections/my_collection/position?z=All', True),
+    ('https://somewhere.com/collections/my_collection/position?z=ALL', True),
+    ('https://somewhere.com/collections/my_collection/position?z=12,23,34', False),
+    ('https://somewhere.com/collections/my_collection/position?z=', False),
+    ('https://somewhere.com/collections/my_collection/position', False),
+])
+def test_z_is_all(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.z.is_all == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?z=12/13', False),
+    ('https://somewhere.com/collections/my_collection/position?z=500,400', True),
+    ('https://somewhere.com/collections/my_collection/position?z=All', False),
+    ('https://somewhere.com/collections/my_collection/position?z=12,23,34', True),
+    ('https://somewhere.com/collections/my_collection/position?z=', False),
+    ('https://somewhere.com/collections/my_collection/position', False),
+])
+def test_z_is_list(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.z.is_list == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?z=500,400', [500, 400]),
+    ('https://somewhere.com/collections/my_collection/position?z=12,23,34', [12, 23, 34]),
+    ('https://somewhere.com/collections/my_collection/position?z=23/45', 'could not convert parameter to a list'),
+    ('https://somewhere.com/collections/my_collection/position?z=', 'could not convert parameter to a list'),
+    ('https://somewhere.com/collections/my_collection/position', 'could not convert parameter to a list'),
+])
+def test_z_list(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.z.list == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?z=12/13', True),
+    ('https://somewhere.com/collections/my_collection/position?z=500/400', True),
+    ('https://somewhere.com/collections/my_collection/position?z=All', False),
+    ('https://somewhere.com/collections/my_collection/position?z=12,23,34', False),
+    ('https://somewhere.com/collections/my_collection/position?z=', False),
+    ('https://somewhere.com/collections/my_collection/position', False),
+])
+def test_z_is_interval(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.z.is_interval == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)', [0.0, 51.48]),
+    ('https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))', [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]),
+])
+def test_coords_coordinates(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.coords.coordinates == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)','Point'),
+    ('https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))','MultiPoint'),
+])
+def test_coords_coords_type(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.coords.coords_type == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z', isoparse('2018-02-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00', isoparse('2019-09-07T15:50-04:00')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=not_a_date', 'Datetime format not recognised'),
+    ('https://somewhere.com/collections/my_collection/position?datetime=23/5/1920', 'Datetime format not recognised'),
+])
+def test_datetime_exact(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.exact == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z', True),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00', True),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z', False),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00', False),
+    ('https://somewhere.com/collections/my_collection/position', False),
+])
+def test_datetime_is_interval(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.is_interval == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z', isoparse('2018-02-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00', isoparse('2019-09-07T15:50-04:00')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=not_a_date/2018-03-12T23%3A20%3A52Z', 'Datetime format not recognised'),
+    ('https://somewhere.com/collections/my_collection/position?datetime=3422-23423-234/2018-03-12T23%3A20%3A52Z', 'Datetime format not recognised'),
+])
+def test_datetime_interval_from(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.interval_from == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z', isoparse('2018-03-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00', isoparse('2019-09-07T15:50-05:00')),
+])
+def test_datetime_interval_to(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.interval_to == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
