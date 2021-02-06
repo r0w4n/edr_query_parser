@@ -1,5 +1,5 @@
 import pytest
-from edr_query_parser.edr_query_parser import EDRQueryParser
+from edr_query_parser import EDRQueryParser
 from dateutil.parser import isoparse
 
 
@@ -16,6 +16,7 @@ def test_collection_name(url, expected):
         assert edr.collection_name == expected
     except ValueError as raisedException:
         assert expected == str(raisedException)
+
 
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/position?', 'position'),
@@ -129,8 +130,10 @@ def test_crs_value(url, expected):
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
      {'type': 'Point', 'coordinates': [0.0, 51.48]}),
-    ('https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
-     {'type': 'MultiPoint', 'coordinates': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]})
+    (
+    'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
+    {'type': 'MultiPoint',
+     'coordinates': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]})
 ])
 def test_coords_wkt(url, expected):
     edr = EDRQueryParser(url)
@@ -263,7 +266,9 @@ def test_z_is_interval(url, expected):
 
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)', [0.0, 51.48]),
-    ('https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))', [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]),
+    (
+    'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
+    [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]),
 ])
 def test_coords_coordinates(url, expected):
     edr = EDRQueryParser(url)
@@ -275,8 +280,10 @@ def test_coords_coordinates(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)','Point'),
-    ('https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))','MultiPoint'),
+    ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)', 'Point'),
+    (
+    'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
+    'MultiPoint'),
 ])
 def test_coords_coords_type(url, expected):
     edr = EDRQueryParser(url)
@@ -288,8 +295,10 @@ def test_coords_coords_type(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z', isoparse('2018-02-12T23:20:52Z')),
-    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00', isoparse('2019-09-07T15:50-04:00')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
+     isoparse('2018-02-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00',
+     isoparse('2019-09-07T15:50-04:00')),
     ('https://somewhere.com/collections/my_collection/position?datetime=not_a_date', 'Datetime format not recognised'),
     ('https://somewhere.com/collections/my_collection/position?datetime=23/5/1920', 'Datetime format not recognised'),
 ])
@@ -303,8 +312,11 @@ def test_datetime_exact(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z', True),
-    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00', True),
+    (
+    'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
+    True),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
+     True),
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z', False),
     ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00', False),
     ('https://somewhere.com/collections/my_collection/position', False),
@@ -319,10 +331,15 @@ def test_datetime_is_interval(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z', isoparse('2018-02-12T23:20:52Z')),
-    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00', isoparse('2019-09-07T15:50-04:00')),
-    ('https://somewhere.com/collections/my_collection/position?datetime=not_a_date/2018-03-12T23%3A20%3A52Z', 'Datetime format not recognised'),
-    ('https://somewhere.com/collections/my_collection/position?datetime=3422-23423-234/2018-03-12T23%3A20%3A52Z', 'Datetime format not recognised'),
+    (
+    'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
+    isoparse('2018-02-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
+     isoparse('2019-09-07T15:50-04:00')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=not_a_date/2018-03-12T23%3A20%3A52Z',
+     'Datetime format not recognised'),
+    ('https://somewhere.com/collections/my_collection/position?datetime=3422-23423-234/2018-03-12T23%3A20%3A52Z',
+     'Datetime format not recognised'),
 ])
 def test_datetime_interval_from(url, expected):
     edr = EDRQueryParser(url)
@@ -334,8 +351,11 @@ def test_datetime_interval_from(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z', isoparse('2018-03-12T23:20:52Z')),
-    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00', isoparse('2019-09-07T15:50-05:00')),
+    (
+    'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
+    isoparse('2018-03-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
+     isoparse('2019-09-07T15:50-05:00')),
 ])
 def test_datetime_interval_to(url, expected):
     edr = EDRQueryParser(url)
