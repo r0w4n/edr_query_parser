@@ -12,30 +12,36 @@ def format_date(date):
 
 
 class EDRQueryParser:
-    QUERY_TYPES = Enum('query_type', 'position radius area cube trajectory corridor items instances locations')
+    QUERY_TYPES = Enum('query_type', 'position radius area cube trajectory corridor items locations')
 
     def __init__(self, url):
-        self.url_list = list(filter(None, urlsplit(url).path.split('/')))
-        self.query_dic = {str(key): ''.join(value) for key, value in parse_qs(urlsplit(url).query).items()}
+        self.url_parts = list(filter(None, urlsplit(url).path.split('/')))
+        self.query_parts = {str(key): ''.join(value) for key, value in parse_qs(urlsplit(url).query).items()}
 
     def _get_id(self, query_id):
         try:
-            return self.url_list[self.url_list.index(query_id) + 1]
+            return self.url_parts[self.url_parts.index(query_id) + 1]
         except IndexError:
             return None
 
     @property
     def collection_name(self):
-        if len(self.url_list) != self.url_list.index('collections') + 2:
-            return self.url_list[self.url_list.index('collections') + 1]
+        if len(self.url_parts) != self.url_parts.index('collections') + 2:
+            return self.url_parts[self.url_parts.index('collections') + 1]
         raise ValueError('collection name not found in url')
 
     @property
     def query_type(self):
         try:
-            return self.QUERY_TYPES[self.url_list[self.url_list.index('collections') + 2]].name
+            if self.is_instances:
+                return self.QUERY_TYPES[self.url_parts[-1]].name
+            return self.QUERY_TYPES[self.url_parts[self.url_parts.index('collections') + 2]].name
         except KeyError:
             raise ValueError('unsupported query type found in url')
+
+    @property
+    def is_instances(self):
+        return self.url_parts[self.url_parts.index('collections') + 2] == 'instances'
 
     @property
     def items_id(self):
@@ -51,31 +57,31 @@ class EDRQueryParser:
 
     @property
     def format(self):
-        return Parameter(self.query_dic.get('f'))
+        return Parameter(self.query_parts.get('f'))
 
     @property
     def coords(self):
-        return Coords(self.query_dic.get('coords'))
+        return Coords(self.query_parts.get('coords'))
 
     @property
     def crs(self):
-        return Parameter(self.query_dic.get('crs'))
+        return Parameter(self.query_parts.get('crs'))
 
     @property
     def parameter_name(self):
-        return ParameterWithList(self.query_dic.get('parameter-name'))
+        return ParameterWithList(self.query_parts.get('parameter-name'))
 
     @property
     def datetime(self):
-        return DateTime(self.query_dic.get('datetime'))
+        return DateTime(self.query_parts.get('datetime'))
 
     @property
     def z(self):
-        return Z(self.query_dic.get('z'))
+        return Z(self.query_parts.get('z'))
 
     @property
     def bbox(self):
-        return ParameterWithFloatList(self.query_dic.get('bbox'))
+        return ParameterWithFloatList(self.query_parts.get('bbox'))
 
 
 class Parameter:
