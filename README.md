@@ -116,7 +116,7 @@ if edr_query.z.is_set:
 print(select) # SELECT * FROM observations height BETWEEN 12.0 AND 240.0
 ```
 
-## EDR CRS Parameter Example
+## EDR crs Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -124,5 +124,14 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
                            'parameter2&f=geoJSON&crs=84&z=12/240')
 
-print(edr_query.crs.value) #84
+print(edr_query.crs.value) # 84
+```
+
+## EDR bbox Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items/some_item/?bbox=12,13,20,21')
+
+print(edr_query.bbox.list) # [12.0, 13.0, 20.0, 21.0]
 ```

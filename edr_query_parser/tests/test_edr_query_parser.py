@@ -131,9 +131,9 @@ def test_crs_value(url, expected):
     ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
      {'type': 'Point', 'coordinates': [0.0, 51.48]}),
     (
-    'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
-    {'type': 'MultiPoint',
-     'coordinates': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]})
+            'https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))',
+            {'type': 'MultiPoint',
+             'coordinates': [[38.9, -77.0], [48.85, 2.35], [39.92, 116.38], [-35.29, 149.1], [51.5, -0.1]]})
 ])
 def test_coords_wkt(url, expected):
     edr = EDRQueryParser(url)
@@ -352,8 +352,8 @@ def test_datetime_interval_from(url, expected):
 
 @pytest.mark.parametrize("url, expected", [
     (
-    'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
-    isoparse('2018-03-12T23:20:52Z')),
+            'https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z',
+            isoparse('2018-03-12T23:20:52Z')),
     ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
      isoparse('2019-09-07T15:50-05:00')),
 ])
@@ -362,5 +362,18 @@ def test_datetime_interval_to(url, expected):
 
     try:
         assert edr.datetime.interval_to == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?bbox=1,10,20,30', [1, 10, 20, 30]),
+    ('https://somewhere.com/collections/my_collection/position?bbox=1,10,20,a', 'could not convert parameter to a list'),
+])
+def test_bbox(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.bbox.list == expected
     except ValueError as raisedException:
         assert expected == str(raisedException)
