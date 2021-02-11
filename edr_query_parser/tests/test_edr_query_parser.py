@@ -7,8 +7,8 @@ from dateutil.parser import isoparse
     ('https://somewhere.com/collections/my_collection/corridor?', 'my_collection'),
     ('https://somewhere.com/collections/collections/position?', 'collections'),
     ('https://somewhere.com/collections/observations/position?', 'observations'),
-    ('https://somewhere.com/collections/position?', 'collection name not found in url'),
-    ('https://somewhere.com/collections/items?', 'collection name not found in url'),
+    ('https://somewhere.com/collections', 'collection name not found in url'),
+    ('https://somewhere.com/items/my_collection', 'collection name not found in url'),
 ])
 def test_collection_name(url, expected):
     edr = EDRQueryParser(url)
