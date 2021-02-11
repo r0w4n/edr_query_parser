@@ -26,9 +26,10 @@ class EDRQueryParser:
 
     @property
     def collection_name(self):
-        if len(self.url_parts) != self.url_parts.index('collections') + 2:
+        try:
             return self.url_parts[self.url_parts.index('collections') + 1]
-        raise ValueError('collection name not found in url')
+        except (ValueError, IndexError):
+            raise ValueError('collection name not found in url')
 
     @property
     def query_type(self):
