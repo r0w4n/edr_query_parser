@@ -5,7 +5,7 @@ from dateutil.parser import isoparse
 
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/corridor?', 'my_collection'),
-    ('https://somewhere.com/collections/collections/position?', 'collections'),
+    ('https://somewhere.com/v1/collections/collections/position?', 'collections'),
     ('https://somewhere.com/collections/observations/position?', 'observations'),
     ('https://somewhere.com/collections', 'collection name not found in url'),
     ('https://somewhere.com/items/my_collection', 'collection name not found in url'),
@@ -32,7 +32,6 @@ def test_collection_name(url, expected):
     ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z/?', 'items'),
     ('https://somewhere.com/collections/my_collection/not_a_query_type?', 'unsupported query type found in url'),
     ('https://somewhere.com/collections/metar/instances/some_instance/radius?', 'radius'),
-
 ])
 def test_query_type(url, expected):
     edr = EDRQueryParser(url)
@@ -393,3 +392,30 @@ def test_bbox(url, expected):
     except ValueError as raisedException:
         assert expected == str(raisedException)
 
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?within=20&within-units=km', 20),
+    (
+            'https://somewhere.com/collections/my_collection/position?within=30&within-units=km', 30),
+])
+def test_within(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.within.value == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?within=20&within-units=km', "km"),
+    (
+            'https://somewhere.com/collections/my_collection/position?within=30&within-units=miles', "miles"),
+])
+def test_within(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.within_units.value == expected
+    except ValueError as raisedException:
+        assert expected == str(raisedException)

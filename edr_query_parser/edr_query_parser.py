@@ -84,6 +84,14 @@ class EDRQueryParser:
     def bbox(self):
         return ParameterWithFloatList(self.query_parts.get('bbox'))
 
+    @property
+    def within(self):
+        return ParameterFloat(self.query_parts.get('within'))
+
+    @property
+    def within_units(self):
+        return Parameter(self.query_parts.get('within-units'))
+
 
 class Parameter:
     def __init__(self, value):
@@ -92,6 +100,12 @@ class Parameter:
     @property
     def is_set(self):
         return self.value is not None
+
+
+class ParameterFloat(Parameter):
+    def __init__(self, value):
+        super().__init__(value)
+        self.value = float(value)
 
 
 class ParameterWithList(Parameter):
