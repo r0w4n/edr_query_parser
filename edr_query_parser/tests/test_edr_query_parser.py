@@ -15,7 +15,7 @@ def test_collection_name(url, expected):
     try:
         assert edr.collection_name == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -38,7 +38,7 @@ def test_query_type(url, expected):
     try:
         assert edr.query_type == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -51,7 +51,7 @@ def test_is_instances(url, expected):
     try:
         assert edr.is_instances == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -71,7 +71,7 @@ def test_parameter_name(url, expected):
     try:
         assert edr.parameter_name.list == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -153,7 +153,7 @@ def test_coords_wkt(url, expected):
     try:
         assert edr.coords.wkt == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -173,7 +173,7 @@ def test_z_float(url, expected):
     try:
         assert edr.z.float == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -189,7 +189,7 @@ def test_z_interval_from(url, expected):
     try:
         assert edr.z.interval_from == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -206,7 +206,7 @@ def test_z_interval_to(url, expected):
     try:
         assert edr.z.interval_to == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -224,7 +224,7 @@ def test_z_is_all(url, expected):
     try:
         assert edr.z.is_all == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -241,7 +241,7 @@ def test_z_is_list(url, expected):
     try:
         assert edr.z.is_list == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -257,7 +257,7 @@ def test_z_list(url, expected):
     try:
         assert edr.z.list == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -274,7 +274,7 @@ def test_z_is_interval(url, expected):
     try:
         assert edr.z.is_interval == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -289,7 +289,7 @@ def test_coords_coordinates(url, expected):
     try:
         assert edr.coords.coordinates == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -304,7 +304,7 @@ def test_coords_coords_type(url, expected):
     try:
         assert edr.coords.coords_type == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -321,7 +321,7 @@ def test_datetime_exact(url, expected):
     try:
         assert edr.datetime.exact == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -340,7 +340,7 @@ def test_datetime_is_interval(url, expected):
     try:
         assert edr.datetime.is_interval == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -360,7 +360,7 @@ def test_datetime_interval_from(url, expected):
     try:
         assert edr.datetime.interval_from == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -376,7 +376,7 @@ def test_datetime_interval_to(url, expected):
     try:
         assert edr.datetime.interval_to == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -390,7 +390,7 @@ def test_bbox(url, expected):
     try:
         assert edr.bbox.list == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -404,7 +404,7 @@ def test_within(url, expected):
     try:
         assert edr.within.value == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -418,4 +418,72 @@ def test_within(url, expected):
     try:
         assert edr.within_units.value == expected
     except ValueError as raisedException:
-        assert expected == str(raisedException)
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z',
+     True),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
+     False),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
+     False),
+])
+def test_datetime_is_less_than(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.is_less_than == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z',
+     False),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
+     True),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
+     False),
+])
+def test_datetime_is_greater_than(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.is_greater_than == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
+     isoparse('2018-02-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z',
+     'datetime not a greater than type'),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
+     'datetime not a greater than type'),
+])
+def test_datetime_greater_than(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.greater_than == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z',
+     isoparse('2018-02-12T23:20:52Z')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
+     'datetime not a less than type'),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
+     'datetime not a less than type'),
+])
+def test_datetime_greater_than(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.datetime.less_than == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected

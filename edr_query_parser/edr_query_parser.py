@@ -168,6 +168,26 @@ class DateTime(ParameterWithInterval):
     def exact(self):
         return format_date(self.value)
 
+    @property
+    def is_greater_than(self):
+        return self.value.endswith('..')
+
+    @property
+    def is_less_than(self):
+        return self.value.startswith('..')
+
+    @property
+    def greater_than(self):
+        if self.is_greater_than:
+            return format_date(self.value.replace('/..', ''))
+        raise ValueError('datetime not a greater than type')
+
+    @property
+    def less_than(self):
+        if self.is_less_than:
+            return format_date(self.value.replace('../', ''))
+        raise ValueError('datetime not a less than type')
+
 
 class Z(ParameterWithFloatList, ParameterWithInterval):
     @property
