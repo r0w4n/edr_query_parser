@@ -185,7 +185,7 @@ class DateTime(ParameterWithInterval):
     @property
     def less_than(self):
         if self.is_less_than:
-            return format_date(self.value.replace('..', ''))
+            return format_date(self.value.replace('../', ''))
         raise ValueError('datetime not a less than type')
 
 
