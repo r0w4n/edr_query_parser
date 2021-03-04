@@ -439,9 +439,9 @@ def test_datetime_is_less_than(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?datetime=..2018-02-12T23%3A20%3A52Z',
+    ('https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z',
      False),
-    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z..',
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
      True),
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
      False),
@@ -456,9 +456,9 @@ def test_datetime_is_greater_than(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z..',
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
      isoparse('2018-02-12T23:20:52Z')),
-    ('https://somewhere.com/collections/my_collection/position?datetime=..2018-02-12T23%3A20%3A52Z',
+    ('https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z',
      'datetime not a greater than type'),
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
      'datetime not a greater than type'),
@@ -473,9 +473,9 @@ def test_datetime_greater_than(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?datetime=..2018-02-12T23%3A20%3A52Z',
+    ('https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z',
      isoparse('2018-02-12T23:20:52Z')),
-    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z..',
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
      'datetime not a less than type'),
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
      'datetime not a less than type'),
