@@ -170,11 +170,11 @@ class DateTime(ParameterWithInterval):
 
     @property
     def is_greater_than(self):
-        return self.value.endswith('..')
+        return self.value.endswith('/..')
 
     @property
     def is_less_than(self):
-        return self.value.startswith('..')
+        return self.value.startswith('../')
 
     @property
     def greater_than(self):

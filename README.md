@@ -84,6 +84,10 @@ select = 'SELECT * FROM observations'
 if edr_query.datetime.is_set:
     if edr_query.datetime.is_interval:
         select += ' date BETWEEN ' + str(edr_query.datetime.interval_from.timestamp()) + ' AND ' + str(edr_query.datetime.interval_to.timestamp())
+    elif edr_query.datetime.is_greater_than:
+        select += ' date >= ' + str(edr_query.datetime.interval_from.timestamp()) + ' AND ' + str(edr_query.datetime.interval_to.timestamp())
+    elif edr_query.datetime.is_less_than:
+        select += ' date <= ' + str(edr_query.datetime.interval_from.timestamp()) + ' AND ' + str(edr_query.datetime.interval_to.timestamp())
     else:
         select += ' date = ' + str(edr_query.datetime.exact.timestamp()) + ')'
 
