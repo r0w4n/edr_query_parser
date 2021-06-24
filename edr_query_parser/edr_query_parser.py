@@ -93,11 +93,11 @@ class EDRQueryParser:
         return Parameter(self.query_parts.get('within-units'))
     
     @property
-    def pagination_token(self):
+    def next(self):
         return Parameter(self.query_parts.get('next'))
 
     @property
-    def pagination_limit(self):
+    def limit(self):
         return ParameterInt(self.query_parts.get('limit'))
 
 

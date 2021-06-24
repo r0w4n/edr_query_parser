@@ -382,7 +382,8 @@ def test_datetime_interval_to(url, expected):
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/position?bbox=1,10,20,30', [1, 10, 20, 30]),
     (
-    'https://somewhere.com/collections/my_collection/position?bbox=1,10,20,a', 'could not convert parameter to a list'),
+            'https://somewhere.com/collections/my_collection/position?bbox=1,10,20,a',
+            'could not convert parameter to a list'),
 ])
 def test_bbox(url, expected):
     edr = EDRQueryParser(url)
@@ -488,30 +489,30 @@ def test_datetime_greater_than(url, expected):
     except ValueError as raisedException:
         assert str(raisedException) == expected
 
+
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/items?next=token123', 'token123'),
     ('https://somewhere.com/collections/my_collection/items?next=', None),
     ('https://somewhere.com/collections/my_collection/items', None)
 ])
-
 def test_pagination(url, expected):
     edr = EDRQueryParser(url)
 
     try:
-        assert edr.pagination_token.value == expected
+        assert edr.next == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
+
 
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/items?limit=100', 100),
     ('https://somewhere.com/collections/my_collection/items?limit=', None),
     ('https://somewhere.com/collections/my_collection/items', None)
 ])
-
 def test_pagination(url, expected):
     edr = EDRQueryParser(url)
 
     try:
-        assert edr.pagination_limit.value == expected
+        assert edr.limit.value == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
