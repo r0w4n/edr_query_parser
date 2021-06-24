@@ -487,3 +487,31 @@ def test_datetime_greater_than(url, expected):
         assert edr.datetime.less_than == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/items?next=123', '123'),
+    ('https://somewhere.com/collections/my_collection/items?next=', None),
+    ('https://somewhere.com/collections/my_collection/items', None)
+])
+
+def test_pagination(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.pagination_token.value == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/items?limit=100', 100),
+    ('https://somewhere.com/collections/my_collection/items?limit=', None),
+    ('https://somewhere.com/collections/my_collection/items', None)
+])
+
+def test_pagination(url, expected):
+    edr = EDRQueryParser(url)
+
+    try:
+        assert edr.pagination_limit.value == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected

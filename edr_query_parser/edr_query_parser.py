@@ -91,6 +91,14 @@ class EDRQueryParser:
     @property
     def within_units(self):
         return Parameter(self.query_parts.get('within-units'))
+    
+    @property
+    def pagination_token(self):
+        return Parameter(self.query_parts.get('next'))
+
+    @property
+    def pagination_limit(self):
+        return ParameterInt(self.query_parts.get('limit'))
 
 
 class Parameter:
@@ -100,6 +108,12 @@ class Parameter:
     @property
     def is_set(self):
         return self.value is not None
+
+
+class ParameterInt(Parameter):
+    def __init__(self, value):
+        super().__init__(value)
+        self.value = int(value) if value else None
 
 
 class ParameterFloat(Parameter):
