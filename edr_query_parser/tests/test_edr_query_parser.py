@@ -489,7 +489,7 @@ def test_datetime_greater_than(url, expected):
         assert str(raisedException) == expected
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/items?next=123', '123'),
+    ('https://somewhere.com/collections/my_collection/items?next=token123', 'token123'),
     ('https://somewhere.com/collections/my_collection/items?next=', None),
     ('https://somewhere.com/collections/my_collection/items', None)
 ])

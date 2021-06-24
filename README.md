@@ -142,3 +142,21 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 
 print(edr_query.bbox.list) # [12.0, 13.0, 20.0, 21.0]
 ```
+
+## EDR Pagination Limit Parameter Examples
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?limit=100')
+
+print(edr_query.limit.value) # 100
+```
+
+## EDR Pagination Token Parameter Examples
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?next=token123')
+
+print(edr_query.limit.value) # "token123"
+```
