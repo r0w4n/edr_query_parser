@@ -101,7 +101,7 @@ from edr_query_parser import EDRQueryParser
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2&coords=POINT(57.819 '
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
 
-print(edr_query.format) # geoJSON
+print(edr_query.format.value) # geoJSON
 ```
 
 ## EDR z Parameter Example
@@ -141,4 +141,22 @@ from edr_query_parser import EDRQueryParser
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items/some_item/?bbox=12,13,20,21')
 
 print(edr_query.bbox.list) # [12.0, 13.0, 20.0, 21.0]
+```
+
+## EDR Pagination Limit Parameter Examples
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?limit=100')
+
+print(edr_query.limit.value) # 100
+```
+
+## EDR Pagination Next Parameter Examples
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?next=token123')
+
+print(edr_query.next.value) # "token123"
 ```
