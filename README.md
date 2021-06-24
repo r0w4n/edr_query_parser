@@ -149,7 +149,7 @@ from edr_query_parser import EDRQueryParser
 
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?limit=100')
 
-print(edr_query.limit.value) # 100
+print(edr_query.pagination_limit.value) # 100
 ```
 
 ## EDR Pagination Token Parameter Examples
@@ -158,5 +158,5 @@ from edr_query_parser import EDRQueryParser
 
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?next=token123')
 
-print(edr_query.next.value) # "token123"
+print(edr_query.pagination_token.value) # "token123"
 ```
