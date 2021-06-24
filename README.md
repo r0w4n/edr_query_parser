@@ -158,5 +158,5 @@ from edr_query_parser import EDRQueryParser
 
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?next=token123')
 
-print(edr_query.limit.value) # "token123"
+print(edr_query.next.value) # "token123"
 ```
