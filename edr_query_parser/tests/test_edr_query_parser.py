@@ -495,11 +495,11 @@ def test_datetime_greater_than(url, expected):
     ('https://somewhere.com/collections/my_collection/items?next=', None),
     ('https://somewhere.com/collections/my_collection/items', None)
 ])
-def test_pagination(url, expected):
+def test_next(url, expected):
     edr = EDRQueryParser(url)
 
     try:
-        assert edr.next == expected
+        assert edr.next.value == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
 
@@ -509,7 +509,7 @@ def test_pagination(url, expected):
     ('https://somewhere.com/collections/my_collection/items?limit=', None),
     ('https://somewhere.com/collections/my_collection/items', None)
 ])
-def test_pagination(url, expected):
+def test_limit(url, expected):
     edr = EDRQueryParser(url)
 
     try:
