@@ -99,8 +99,6 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
                            'parameter2&f=geoJSON&crs=84&z=12/240')
 
-select = 'SELECT * FROM observations'
-
 if edr_query.z.is_set:
     if edr_query.z.is_interval:
         print(edr_query.z.interval_from, edr_query.z.interval_to)
