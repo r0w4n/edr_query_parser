@@ -16,9 +16,7 @@ from edr_query_parser import EDRQueryParser
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2&coords=POINT(57.819 '
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
 
-select = 'SELECT * FROM ' + edr_query.collection_name
-
-print(select) # SELECT * FROM my_collection
+print(edr_query.collection_name) #my_collection
 ```
 
 ## EDR Query Type Example
@@ -43,13 +41,12 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
                            'parameter2&f=geoJSON&crs=84&z=all')
 
-select = 'SELECT * FROM observations'
-
 if edr_query.coords.is_set:
+    print(edr_query.coords.coords_type) # Point
     if edr_query.coords.coords_type == 'Point':
-        select += ' WHERE NEAREST_NEIGHBOUR(' + str(edr_query.coords.coordinates[0]) + ',' + str(edr_query.coords.coordinates[0]) + ')'
-
-print(select) # SELECT * FROM observations WHERE NEAREST_NEIGHBOUR(57.819,-3.966)
+        print(edr_query.coords.coordinates[0]) # 57.819
+        print(edr_query.coords.coordinates[1]) # -3.966
+        
 ```
 
 ## EDR parameter-name Example
@@ -59,15 +56,8 @@ from edr_query_parser import EDRQueryParser
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
                            'parameter2&f=geoJSON&crs=84&z=all')
-select = 'SELECT '
 if edr_query.parameter_name.is_set:
-    select += ','.join(edr_query.parameter_name.list)
-else:
-    select += '*'
-    
-select += ' FROM observations'
-
-print(select) # SELECT parameter1, parameter2 FROM observations'
+    print(edr_query.parameter_name.list) # [parameter1, parameter2]
 ```
 
 ## EDR datetime Example
@@ -79,19 +69,16 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
                            '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
                            'parameter2&f=geoJSON&crs=84&z=all')
 
-select = 'SELECT * FROM observations'
-
 if edr_query.datetime.is_set:
     if edr_query.datetime.is_interval:
-        select += ' date BETWEEN ' + str(edr_query.datetime.interval_from.timestamp()) + ' AND ' + str(edr_query.datetime.interval_to.timestamp())
+        print(edr_query.datetime.interval_from.timestamp(), edr_query.datetime.interval_to.timestamp())
     elif edr_query.datetime.is_greater_than:
-        select += ' date >= ' + str(edr_query.datetime.interval_from.timestamp()) + ' AND ' + str(edr_query.datetime.interval_to.timestamp())
+        print(edr_query.datetime.interval_to.timestamp())
     elif edr_query.datetime.is_less_than:
-        select += ' date <= ' + str(edr_query.datetime.interval_from.timestamp()) + ' AND ' + str(edr_query.datetime.interval_to.timestamp())
+        print(edr_query.datetime.interval_from.timestamp())
     else:
-        select += ' date = ' + str(edr_query.datetime.exact.timestamp()) + ')'
+        print(edr_query.datetime.exact.timestamp())
 
-print(select) # SELECT * FROM observations date BETWEEN 1567885800.0 AND 1567889400.0
 ```
 ## EDR f Parameter Example
 
@@ -116,11 +103,10 @@ select = 'SELECT * FROM observations'
 
 if edr_query.z.is_set:
     if edr_query.z.is_interval:
-        select += ' height BETWEEN ' + str(edr_query.z.interval_from) + ' AND ' + str(edr_query.z.interval_to)
+        print(edr_query.z.interval_from, edr_query.z.interval_to)
     if edr_query.z.is_list:
-        select += ' height IN (' + ','.join(map(str, edr_query.z.list)) + ')'
+        print(edr_query.z.interval_from, edr_query.z.list)
 
-print(select) # SELECT * FROM observations height BETWEEN 12.0 AND 240.0
 ```
 
 ## EDR crs Parameter Example
@@ -143,7 +129,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 print(edr_query.bbox.list) # [12.0, 13.0, 20.0, 21.0]
 ```
 
-## EDR Pagination Limit Parameter Examples
+## EDR Pagination Limit Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -152,7 +138,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 print(edr_query.limit.value) # 100
 ```
 
-## EDR Pagination Next Parameter Examples
+## EDR Pagination Next Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
