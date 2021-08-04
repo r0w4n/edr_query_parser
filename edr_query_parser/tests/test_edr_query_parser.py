@@ -491,6 +491,14 @@ def test_datetime_greater_than(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/items?next=token123++dsfas&param1=apple%20+%20banana', 'token123++dsfas'),
+    ('https://somewhere.com/collections/my_collection/items?next=apple%20+%20banana', 'apple + banana'),
+    ('https://somewhere.com/collections/my_collection/items?next=%20', ' '),
+    ('https://somewhere.com/collections/my_collection/items?next=+', '+'),
+    ('https://somewhere.com/collections/my_collection/items?next=""', '""'),
+    ('https://somewhere.com/collections/my_collection/items?next="', '"'),
+    ("https://somewhere.com/collections/my_collection/items?next=''", "''"),
+    ("https://somewhere.com/collections/my_collection/items?next='", "'"),
     ('https://somewhere.com/collections/my_collection/items?next=token123', 'token123'),
     ('https://somewhere.com/collections/my_collection/items?next=', None),
     ('https://somewhere.com/collections/my_collection/items', None)

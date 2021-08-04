@@ -1,4 +1,4 @@
-from urllib.parse import urlsplit, parse_qs
+from urllib.parse import urlsplit, parse_qs, unquote
 from dateutil.parser import isoparse
 from enum import Enum
 from geomet import wkt
@@ -17,6 +17,28 @@ class EDRQueryParser:
     def __init__(self, url):
         self.url_parts = list(filter(None, urlsplit(url).path.split('/')))
         self.query_parts = {str(key): ''.join(value) for key, value in parse_qs(urlsplit(url).query).items()}
+        if 'next' in self.query_parts.keys():
+            url_next_param = EDRQueryParser.query_parts_with_plus(url).get('next', None)
+            if url_next_param is not None:
+                self.query_parts.update({'next': url_next_param})
+
+    @classmethod
+    def query_parts_with_plus(cls, url):
+        query_parts = {}
+        try:
+            url_split_obj = urlsplit(url)
+            url_unquote = unquote(url_split_obj.query)
+            url_list_by_amp = url_unquote.split('&')
+            for parameter in url_list_by_amp:
+                if len(parameter.split('=', 1)) == 2:
+                    param, val = parameter.split('=', 1)
+                    if not val == '':
+                        query_parts[param] = val
+                else:
+                    pass
+            return query_parts
+        except Exception as e:
+            return {}
 
     def _get_id(self, query_id):
         try:
@@ -95,6 +117,10 @@ class EDRQueryParser:
     @property
     def next(self):
         return Parameter(self.query_parts.get('next'))
+
+    @property
+    def next_unquote(self):
+        return Parameter(self.query_parts_unquote.get('next'))
 
     @property
     def limit(self):
