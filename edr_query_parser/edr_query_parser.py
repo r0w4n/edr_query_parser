@@ -119,10 +119,6 @@ class EDRQueryParser:
         return Parameter(self.query_parts.get('next'))
 
     @property
-    def next_unquote(self):
-        return Parameter(self.query_parts_unquote.get('next'))
-
-    @property
     def limit(self):
         return ParameterInt(self.query_parts.get('limit'))
 
