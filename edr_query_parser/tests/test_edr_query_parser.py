@@ -36,7 +36,115 @@ def test_collection_name(url, expected):
 def test_query_type(url, expected):
     edr = EDRQueryParser(url)
     try:
-        assert edr.query_type == expected
+        assert edr.query_type.value == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', True),
+    ('https://somewhere.com/collections/my_collection/radius?', False),
+    ('https://somewhere.com/collections/my_collection/area?', False),
+    ('https://somewhere.com/collections/my_collection/cube?', False),
+    ('https://somewhere.com/collections/my_collection/trajectory?', False),
+    ('https://somewhere.com/collections/my_collection/corridor?', False),
+    ('https://somewhere.com/collections/my_collection/items?', False),
+    ('https://somewhere.com/collections/my_collection/locations?', False),
+    ('https://somewhere.com/collections/metar/locations/EGLL?', False),
+    ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z?', False),
+    ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z/?', False),
+    ('https://somewhere.com/collections/my_collection/not_a_query_type?', 'unsupported query type found in url'),
+    ('https://somewhere.com/collections/metar/instances/some_instance/radius?', False),
+    ('https://somewhere.com/collections/metar/instances/some_instance/position?', True),
+])
+def test_query_type_is_position(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_position == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', False),
+    ('https://somewhere.com/collections/my_collection/radius?', True),
+])
+def test_query_type_is_radius(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_radius == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/area?', True),
+    ('https://somewhere.com/collections/my_collection/radius?', False),
+])
+def test_query_type_is_area(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_area == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', False),
+    ('https://somewhere.com/collections/my_collection/radius?', True),
+])
+def test_query_type_is_cube(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_radius == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', False),
+    ('https://somewhere.com/collections/my_collection/trajectory?', True),
+])
+def test_query_type_is_trajectory(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_trajectory == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', False),
+    ('https://somewhere.com/collections/my_collection/corridor?', True),
+])
+def test_query_type_is_corridor(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_corridor == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', False),
+    ('https://somewhere.com/collections/my_collection/items?', True),
+])
+def test_query_type_is_items(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_items == expected
+    except ValueError as raisedException:
+        assert str(raisedException) == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ('https://somewhere.com/collections/my_collection/position?', False),
+    ('https://somewhere.com/collections/my_collection/locations?', True),
+])
+def test_query_type_is_locations(url, expected):
+    edr = EDRQueryParser(url)
+    try:
+        assert edr.query_type.is_locations == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
 

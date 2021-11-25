@@ -12,8 +12,6 @@ def format_date(date):
 
 
 class EDRQueryParser:
-    QUERY_TYPES = Enum('query_type', 'position radius area cube trajectory corridor items locations')
-
     def __init__(self, url):
         self.url_parts = list(filter(None, urlsplit(url).path.split('/')))
         self.query_parts = {str(key): ''.join(value) for key, value in parse_qs(urlsplit(url).query).items()}
@@ -33,12 +31,7 @@ class EDRQueryParser:
 
     @property
     def query_type(self):
-        try:
-            if self.is_instances:
-                return self.QUERY_TYPES[self.url_parts[-1]].name
-            return self.QUERY_TYPES[self.url_parts[self.url_parts.index('collections') + 2]].name
-        except KeyError:
-            raise ValueError('unsupported query type found in url')
+        return QueryTypes(self.is_instances, self.url_parts)
 
     @property
     def is_instances(self):
@@ -91,7 +84,7 @@ class EDRQueryParser:
     @property
     def within_units(self):
         return Parameter(self.query_parts.get('within-units'))
-    
+
     @property
     def next(self):
         return Parameter(self.query_parts.get('next'))
@@ -242,3 +235,52 @@ class Coords(Parameter):
     @property
     def coordinates(self):
         return self.wkt['coordinates']
+
+
+class QueryTypes:
+    QUERY_TYPES = Enum('query_type', 'position radius area cube trajectory corridor items locations')
+
+    def __init__(self, is_instances, url_parts):
+        try:
+            if is_instances:
+                self.query_type = self.QUERY_TYPES[url_parts[-1]].name
+            else:
+                self.query_type = self.QUERY_TYPES[url_parts[url_parts.index('collections') + 2]].name
+        except KeyError:
+            raise ValueError('unsupported query type found in url')
+
+    @property
+    def value(self):
+        return self.query_type
+
+    @property
+    def is_position(self):
+        return self.query_type == 'position'
+
+    @property
+    def is_radius(self):
+        return self.query_type == 'radius'
+
+    @property
+    def is_area(self):
+        return self.query_type == 'area'
+
+    @property
+    def is_cube(self):
+        return self.query_type == 'cube'
+
+    @property
+    def is_trajectory(self):
+        return self.query_type == 'trajectory'
+
+    @property
+    def is_corridor(self):
+        return self.query_type == 'corridor'
+
+    @property
+    def is_items(self):
+        return self.query_type == 'items'
+
+    @property
+    def is_locations(self):
+        return self.query_type == 'locations'
