@@ -29,7 +29,9 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
 if edr_query.is_instances:
     print(edr_query.instances_id)
 else:
-    print(edr_query.query_type) # position
+    print(edr_query.query_type.is_position) # True
+    print(edr_query.query_type.is_radius) # False
+    print(edr_query.query_type.value) # position
 ```
 
 ## EDR coords Example
