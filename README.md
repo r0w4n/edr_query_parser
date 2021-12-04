@@ -1,4 +1,4 @@
-# Environmental Data Retrieval Query Parser
+# OGC Environmental Data Retrieval Query Parser
 The [OGC API Environmental Data Retrieval](https://github.com/opengeospatial/ogcapi-environmental-data-retrieval) query parser makes it easy to parse and use the API query.
 
 ![Python package and update to PyPi](https://github.com/r0w4n/edr_query_parser/workflows/Python%20package%20and%20update%20to%20PyPi/badge.svg)
