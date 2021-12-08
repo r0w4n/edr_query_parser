@@ -5,7 +5,7 @@ The [OGC API Environmental Data Retrieval](https://github.com/opengeospatial/ogc
 ![PyPI - License](https://img.shields.io/pypi/l/edr-query-parser)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/edr-query-parser)
 
-# install
+# Install
 ```shell
 pip install edr-query-parser
 ```
@@ -34,6 +34,18 @@ else:
     print(edr_query.query_type.is_position) # True
     print(edr_query.query_type.is_radius) # False
     print(edr_query.query_type.value) # position
+```
+
+## EDR location ID Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/locations/aberdeen?parameter-name='
+                            'param1,param2&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
+
+if edr_query.is_locations:
+    print(edr_query.locations_id) #aberdeen
+
 ```
 
 ## EDR coords Example
@@ -141,6 +153,15 @@ print(edr_query.limit.value) # 100
 ```
 
 ## EDR Pagination Next Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?next=token123')
+
+print(edr_query.next.value) # "token123"
+```
+
+## EDR  Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
