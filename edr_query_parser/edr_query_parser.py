@@ -149,17 +149,11 @@ class ParameterWithInterval(Parameter):
 
     @property
     def interval_from(self):
-        try:
-            return self._split(0)
-        except (ValueError, TypeError):
-            raise ValueError('unable to get interval from value')
+        return self._split(0)
 
     @property
     def interval_to(self):
-        try:
-            return self._split(1)
-        except (ValueError, TypeError):
-            raise ValueError('unable to get interval to value')
+        return self._split(1)
 
 
 class DateTime(ParameterWithInterval):
