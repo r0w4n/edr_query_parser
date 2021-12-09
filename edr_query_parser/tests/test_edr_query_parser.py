@@ -53,7 +53,6 @@ def test_query_type(url, expected):
     ('https://somewhere.com/collections/metar/locations/EGLL?', False),
     ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z?', False),
     ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z/?', False),
-    ('https://somewhere.com/collections/my_collection/not_a_query_type?', 'unsupported query type found in url'),
     ('https://somewhere.com/collections/metar/instances/some_instance/radius?', False),
     ('https://somewhere.com/collections/metar/instances/some_instance/position?', True),
 ])
