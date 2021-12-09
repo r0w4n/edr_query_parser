@@ -37,7 +37,9 @@ jobs:
     - name: Test with pytest
       run: |
          pytest -v --cov --cov-report=xml --cov-report=html
-         
+    - name: Pytest Coverage Commentator
+      uses: coroo/pytest-coverage-commentator@v1.0.2
+
   deploy:
     needs: build
     if: github.ref == 'refs/heads/main'
