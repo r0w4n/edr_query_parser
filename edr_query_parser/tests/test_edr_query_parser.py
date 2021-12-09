@@ -553,15 +553,11 @@ def test_datetime_is_less_than(url, expected):
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
      True),
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
-     False),
+     False)
 ])
 def test_datetime_is_greater_than(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.datetime.is_greater_than == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.datetime.is_greater_than == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -589,7 +585,7 @@ def test_datetime_greater_than(url, expected):
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
      'datetime not a less than type'),
 ])
-def test_datetime_greater_than(url, expected):
+def test_datetime_less_than(url, expected):
     edr = EDRQueryParser(url)
 
     try:
@@ -606,10 +602,7 @@ def test_datetime_greater_than(url, expected):
 def test_next(url, expected):
     edr = EDRQueryParser(url)
 
-    try:
-        assert edr.next.value == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.next.value == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -620,7 +613,5 @@ def test_next(url, expected):
 def test_limit(url, expected):
     edr = EDRQueryParser(url)
 
-    try:
-        assert edr.limit.value == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.limit.value == expected
+
