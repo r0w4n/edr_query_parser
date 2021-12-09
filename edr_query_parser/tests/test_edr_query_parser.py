@@ -91,12 +91,12 @@ def test_query_type_is_area(url, expected):
 
 @pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/position?', False),
-    ('https://somewhere.com/collections/my_collection/radius?', True),
+    ('https://somewhere.com/collections/my_collection/cube?', True),
 ])
 def test_query_type_is_cube(url, expected):
     edr = EDRQueryParser(url)
     try:
-        assert edr.query_type.is_radius == expected
+        assert edr.query_type.is_cube == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
 
@@ -521,7 +521,7 @@ def test_within(url, expected):
     (
             'https://somewhere.com/collections/my_collection/position?within=30&within-units=miles', "miles"),
 ])
-def test_within(url, expected):
+def test_within_units(url, expected):
     edr = EDRQueryParser(url)
 
     try:
