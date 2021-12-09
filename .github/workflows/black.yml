@@ -5,6 +5,6 @@ jobs:
   black:
     runs-on: ubuntu-latest
     steps:
-      - uses: jpetrucciani/black-check@master
-        with:
-          path: '.'
+      - uses: actions/checkout@v2
+      - name: Black Code Formatter
+        uses: jpetrucciani/black-check@master
