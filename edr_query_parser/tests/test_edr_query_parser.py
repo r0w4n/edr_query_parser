@@ -53,16 +53,12 @@ def test_query_type(url, expected):
     ('https://somewhere.com/collections/metar/locations/EGLL?', False),
     ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z?', False),
     ('https://somewhere.com/collections/metar/items/KIAD_2020-05-19T00Z/?', False),
-    ('https://somewhere.com/collections/my_collection/not_a_query_type?', 'unsupported query type found in url'),
     ('https://somewhere.com/collections/metar/instances/some_instance/radius?', False),
     ('https://somewhere.com/collections/metar/instances/some_instance/position?', True),
 ])
 def test_query_type_is_position(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_position == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_position == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -71,10 +67,7 @@ def test_query_type_is_position(url, expected):
 ])
 def test_query_type_is_radius(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_radius == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_radius == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -83,10 +76,7 @@ def test_query_type_is_radius(url, expected):
 ])
 def test_query_type_is_area(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_area == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_area == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -95,10 +85,7 @@ def test_query_type_is_area(url, expected):
 ])
 def test_query_type_is_cube(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_cube == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_cube == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -107,10 +94,7 @@ def test_query_type_is_cube(url, expected):
 ])
 def test_query_type_is_trajectory(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_trajectory == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_trajectory == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -119,10 +103,7 @@ def test_query_type_is_trajectory(url, expected):
 ])
 def test_query_type_is_corridor(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_corridor == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_corridor == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -131,10 +112,7 @@ def test_query_type_is_corridor(url, expected):
 ])
 def test_query_type_is_items(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_items == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_items == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -143,10 +121,7 @@ def test_query_type_is_items(url, expected):
 ])
 def test_query_type_is_locations(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.query_type.is_locations == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.query_type.is_locations == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -155,11 +130,7 @@ def test_query_type_is_locations(url, expected):
 ])
 def test_is_instances(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.is_instances == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.is_instances == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -239,16 +210,6 @@ def test_crs_value(url, expected):
 
 
 @pytest.mark.parametrize("url, expected", [
-    ('https://somewhere.com/collections/my_collection/position?crs=WGS84', 'WGS84'),
-    ('https://somewhere.com/collections/my_collection/instances', None),
-    ('https://somewhere.com/collections/my_collection/instances?crs=', None),
-])
-def test_crs_value(url, expected):
-    edr = EDRQueryParser(url)
-    assert edr.crs.value == expected
-
-
-@pytest.mark.parametrize("url, expected", [
     ('https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)',
      {'type': 'Point', 'coordinates': [0.0, 51.48]}),
     (
@@ -258,10 +219,7 @@ def test_crs_value(url, expected):
 ])
 def test_coords_wkt(url, expected):
     edr = EDRQueryParser(url)
-    try:
-        assert edr.coords.wkt == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.coords.wkt == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -328,11 +286,7 @@ def test_z_interval_to(url, expected):
 ])
 def test_z_is_all(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.z.is_all == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.z.is_all == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -345,11 +299,7 @@ def test_z_is_all(url, expected):
 ])
 def test_z_is_list(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.z.is_list == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.z.is_list == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -378,11 +328,7 @@ def test_z_list(url, expected):
 ])
 def test_z_is_interval(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.z.is_interval == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.z.is_interval == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -393,11 +339,7 @@ def test_z_is_interval(url, expected):
 ])
 def test_coords_coordinates(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.coords.coordinates == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.coords.coordinates == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -408,11 +350,7 @@ def test_coords_coordinates(url, expected):
 ])
 def test_coords_coords_type(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.coords.coords_type == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.coords.coords_type == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -444,11 +382,7 @@ def test_datetime_exact(url, expected):
 ])
 def test_datetime_is_interval(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.datetime.is_interval == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.datetime.is_interval == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -477,6 +411,8 @@ def test_datetime_interval_from(url, expected):
             isoparse('2018-03-12T23:20:52Z')),
     ('https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00',
      isoparse('2019-09-07T15:50-05:00')),
+    ('https://somewhere.com/collections/my_collection/position?datetime=2018-03-12T23%3A20%3A52Z/3422-23423-234',
+     'Datetime format not recognised'),
 ])
 def test_datetime_interval_to(url, expected):
     edr = EDRQueryParser(url)
@@ -509,11 +445,7 @@ def test_bbox(url, expected):
 ])
 def test_within(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.within.value == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.within.value == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -523,11 +455,7 @@ def test_within(url, expected):
 ])
 def test_within_units(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.within_units.value == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.within_units.value == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -540,11 +468,7 @@ def test_within_units(url, expected):
 ])
 def test_datetime_is_less_than(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.datetime.is_less_than == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.datetime.is_less_than == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -553,15 +477,11 @@ def test_datetime_is_less_than(url, expected):
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..',
      True),
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
-     False),
+     False)
 ])
 def test_datetime_is_greater_than(url, expected):
     edr = EDRQueryParser(url)
-
-    try:
-        assert edr.datetime.is_greater_than == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.datetime.is_greater_than == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -589,7 +509,7 @@ def test_datetime_greater_than(url, expected):
     ('https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z',
      'datetime not a less than type'),
 ])
-def test_datetime_greater_than(url, expected):
+def test_datetime_less_than(url, expected):
     edr = EDRQueryParser(url)
 
     try:
@@ -606,10 +526,7 @@ def test_datetime_greater_than(url, expected):
 def test_next(url, expected):
     edr = EDRQueryParser(url)
 
-    try:
-        assert edr.next.value == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.next.value == expected
 
 
 @pytest.mark.parametrize("url, expected", [
@@ -620,7 +537,5 @@ def test_next(url, expected):
 def test_limit(url, expected):
     edr = EDRQueryParser(url)
 
-    try:
-        assert edr.limit.value == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    assert edr.limit.value == expected
+
