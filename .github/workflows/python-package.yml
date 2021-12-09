@@ -36,10 +36,17 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-         pytest  --cache-clear --cov=app > pytest-coverage.txt
-    - name: Pytest Coverage Commentator
-      uses: coroo/pytest-coverage-commentator@v1.0.2
-
+        pytest -v  --cov --cov-report=xml --cov-report=html
+    - uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage
+        path: htmlcov
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
   deploy:
     needs: build
     if: github.ref == 'refs/heads/main'
