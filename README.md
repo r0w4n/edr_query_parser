@@ -79,6 +79,7 @@ if edr_query.parameter_name.is_set:
 
 ## EDR datetime Example
 The EDR query parser returns a [dateutil](http://labix.org/python-dateutil) object
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -89,10 +90,10 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
 if edr_query.datetime.is_set:
     if edr_query.datetime.is_interval:
         print(edr_query.datetime.interval_from.timestamp(), edr_query.datetime.interval_to.timestamp())
-    elif edr_query.datetime.is_greater_than:
-        print(edr_query.datetime.interval_to.timestamp())
-    elif edr_query.datetime.is_less_than:
-        print(edr_query.datetime.interval_from.timestamp())
+    elif edr_query.datetime.is_interval_open_end:
+        print(edr_query.datetime.interval_open_end.timestamp())
+    elif edr_query.datetime.is_interval_open_start:
+        print(edr_query.datetime.interval_open_start.timestamp())
     else:
         print(edr_query.datetime.exact.timestamp())
 
