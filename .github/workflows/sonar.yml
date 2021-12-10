@@ -24,6 +24,18 @@ jobs:
         pytest -v  --cov --cov-report=xml --cov-report=html
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
+      with:
+        args: >
+          -Dsonar.python.version=3
+          -Dsonar.organization=r0w4n
+          -Dsonar.projectKey=r0w4n_edr_query_parser
+          -Dsonar.python.coverage.reportPaths=coverage.xml
+          -Dsonar.sources=.
+          -Dsonar.python.coverage.reportPaths=*coverage*.xml
+          -Dsonar.dynamicAnalysis=reuseReports
+          -Dsonar.core.codeCoveragePlugin=cobertura
+          -Dsonar.python.coverage.reportPaths=*coverage*.xml
+          -Dsonar.python.xunit.reportPath=xunit-result*.xml
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
