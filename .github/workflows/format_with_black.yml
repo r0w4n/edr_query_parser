@@ -1,0 +1,16 @@
+name: Format with Black
+
+on: [push]
+
+jobs:
+  format_with_black:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: format with black
+        uses: psf/black@stable
+        with:
+          options: "./"
+      - name: add commit changes
+        uses: EndBug/add-and-commit@v7
