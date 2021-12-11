@@ -6,8 +6,8 @@ jobs:
   format_with_black:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@2
+      - uses: actions/checkout@v2
       - uses: psf/black@stable
         with:
           options: "./"
-      - uses: EndBug/add-and-commit@7
+      - uses: EndBug/add-and-commit@v7
