@@ -6,6 +6,7 @@ The [OGC API Environmental Data Retrieval](https://github.com/opengeospatial/ogc
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/edr-query-parser)
 ![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/r0w4n_edr_query_parser?server=https%3A%2F%2Fsonarcloud.io)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+![Codecov](https://img.shields.io/codecov/c/github/r0w4n/edr_query_parser)
 
 # Install
 ```shell
