@@ -4,9 +4,9 @@ on:
       - master
   pull_request:
       types: [opened, synchronize, reopened]
-name: Main Workflow
+name: Sonar
 jobs:
-  pytest:
+  sonar:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -24,13 +24,6 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --junitxml=pytest-report.xml
-    - name: list files
-      run: |
-        ls
-  sonarcloud:
-    runs-on: ubuntu-latest
-    needs: pytest
-    steps:
     - name: list files
       run: |
         ls
