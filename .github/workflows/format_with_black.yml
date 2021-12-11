@@ -3,11 +3,11 @@ name: Format with Black
 on: [push]
 
 jobs:
-  lint:
+  format_with_black:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@latest
+      - uses: actions/checkout@2
       - uses: psf/black@stable
         with:
           options: "./"
-      - uses: EndBug/add-and-commit@latest
+      - uses: EndBug/add-and-commit@7
