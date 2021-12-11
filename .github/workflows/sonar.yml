@@ -22,9 +22,6 @@ jobs:
     - name: Test with pytest
       run: |
         pytest -v  --cov --cov-report=xml --cov-report=html
-    - name: fix code coverage paths
-      run: |
-        sed -i 's/\/home\/runner\/work\/edr_query_parser\/edr_query_parser\//\/github\/workspace\//g' coverage.xml
     - uses: actions/upload-artifact@v2
       with:
         name: code-coverage
