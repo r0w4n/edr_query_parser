@@ -25,13 +25,15 @@ jobs:
       run: |
         pytest --junitxml=pytest-report.xml
     - name: list files
-      uses: the-coding-turtle/ga-file-list@v0.2
+      run: |
+        ls
   sonarcloud:
     runs-on: ubuntu-latest
     needs: pytest
     steps:
     - name: list files
-      uses: the-coding-turtle/ga-file-list@v0.2
+      run: |
+        ls
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
