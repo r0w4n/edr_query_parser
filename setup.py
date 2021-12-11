@@ -4,6 +4,10 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
+
+
+
+
     name="edr query parser",
     version="3.2.7",
     author="r0w4n",
