@@ -8,7 +8,7 @@ setuptools.setup(
     version="3.2.8",
     author="r0w4n",
     author_email="r0w4n@nuisance.com",
-    description="Environmental data retrieval API query parser",
+    description="OGC Environmental data retrieval API query parser",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/r0w4n/edr_query_parser",

@@ -27,6 +27,9 @@ jobs:
     - name: list files
       run: |
         ls
+    - name: fix code coverage paths
+      run: |
+        sed -i 's/\/home\/runner\/work\/edr_query_parser\/edr_query_parser\//\/github\/workspace\//g' coverage.xml
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
