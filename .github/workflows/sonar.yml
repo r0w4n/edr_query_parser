@@ -1,3 +1,5 @@
+name: Sonarqube
+
 on:
   push:
     branches:
