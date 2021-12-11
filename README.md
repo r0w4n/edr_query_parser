@@ -6,6 +6,7 @@ The [OGC API Environmental Data Retrieval](https://github.com/opengeospatial/ogc
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/edr-query-parser)
 ![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/r0w4n_edr_query_parser?server=https%3A%2F%2Fsonarcloud.io)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fr0w4n%2Fedr_query_parser.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fr0w4n%2Fedr_query_parser?ref=badge_shield)
 
 # Install
 ```shell
@@ -171,3 +172,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 
 print(edr_query.next.value) # "token123"
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fr0w4n%2Fedr_query_parser.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fr0w4n%2Fedr_query_parser?ref=badge_large)
