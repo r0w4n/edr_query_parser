@@ -5,30 +5,31 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ 3.6, 3.7, 3.8, 3.9, '3.10' ]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install pytest
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Test with pytest
-        run: |
-          pytest
-  deploy:
-    needs: test
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.x
+    - name: Install pypa/build
+      run: >-
+        python -m
+        pip install
+        build
+        --user
+    - name: Build a binary wheel and a source tarball
+      run: >-
+        python -m
+        build
+        --sdist
+        --wheel
+        --outdir dist/
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Publish a Python distribution to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
