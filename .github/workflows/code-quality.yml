@@ -1,4 +1,4 @@
-name: Sonarqube
+name: Sonarqube & CodeCov
 
 on:
   push:
@@ -26,8 +26,17 @@ jobs:
     - name: fix code coverage paths
       run: |
         sed -i 's/\/home\/runner\/work\/edr_query_parser\/edr_query_parser\//\/github\/workspace\//g' coverage.xml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage
+        path: htmlcov
     - name: "Upload coverage to Codecov"
       uses: codecov/codecov-action@v2
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
