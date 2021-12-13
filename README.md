@@ -15,7 +15,7 @@ pip install edr-query-parser
 
 # Usage
 
-## EDR Collection Name Example
+## Collection Name Example
 ```python
 from edr_query_parser import EDRQueryParser
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2&coords=POINT(57.819 '
@@ -24,7 +24,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
 print(edr_query.collection_name) #my_collection
 ```
 
-## EDR Query Type Example
+## Query Type Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -39,7 +39,7 @@ else:
     print(edr_query.query_type.value) # position
 ```
 
-## EDR location ID Example
+## location ID Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -51,7 +51,7 @@ if edr_query.is_locations:
 
 ```
 
-## EDR coords Example
+## coords Example
 The EDR query parser returns a [WKT](https://github.com/geomet/geomet) object
 ```python
 from edr_query_parser import EDRQueryParser
@@ -68,7 +68,7 @@ if edr_query.coords.is_set:
         
 ```
 
-## EDR parameter-name Example
+## parameter-name Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -79,7 +79,7 @@ if edr_query.parameter_name.is_set:
     print(edr_query.parameter_name.list) # [parameter1, parameter2]
 ```
 
-## EDR datetime Example
+## datetime Example
 The EDR query parser returns a [dateutil](http://labix.org/python-dateutil) object
 
 ```python
@@ -100,7 +100,7 @@ if edr_query.datetime.is_set:
         print(edr_query.datetime.exact.timestamp())
 
 ```
-## EDR f Parameter Example
+## f Parameter Example
 
 ```python
 from edr_query_parser import EDRQueryParser
@@ -111,7 +111,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
 print(edr_query.format.value) # geoJSON
 ```
 
-## EDR z Parameter Example
+## z Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -127,7 +127,7 @@ if edr_query.z.is_set:
 
 ```
 
-## EDR crs Parameter Example
+## crs Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -138,7 +138,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
 print(edr_query.crs.value) # 84
 ```
 
-## EDR bbox Parameter Example
+## bbox Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -147,7 +147,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 print(edr_query.bbox.list) # [12.0, 13.0, 20.0, 21.0]
 ```
 
-## EDR Pagination Limit Parameter Example
+## Pagination Limit Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -156,16 +156,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 print(edr_query.limit.value) # 100
 ```
 
-## EDR Pagination Next Parameter Example
-```python
-from edr_query_parser import EDRQueryParser
-
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?next=token123')
-
-print(edr_query.next.value) # "token123"
-```
-
-## EDR  Parameter Example
+## Pagination Next Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
