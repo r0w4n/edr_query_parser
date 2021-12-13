@@ -173,24 +173,24 @@ class DateTime(ParameterWithInterval):
         return format_date(self.value)
 
     @property
-    def is_greater_than(self):
+    def is_interval_open_end(self):
         return self.value.endswith("/..")
 
     @property
-    def is_less_than(self):
+    def is_interval_open_start(self):
         return self.value.startswith("../")
 
     @property
-    def greater_than(self):
-        if self.is_greater_than:
+    def interval_open_end(self):
+        if self.is_interval_open_end:
             return format_date(self.value.replace("/..", ""))
-        raise ValueError("datetime not a greater than type")
+        raise ValueError("datetime not an interval open end type")
 
     @property
-    def less_than(self):
-        if self.is_less_than:
+    def interval_open_start(self):
+        if self.is_interval_open_start:
             return format_date(self.value.replace("../", ""))
-        raise ValueError("datetime not a less than type")
+        raise ValueError("datetime not an interval open start type")
 
 
 class Z(ParameterWithFloatList, ParameterWithInterval):

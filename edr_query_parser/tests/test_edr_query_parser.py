@@ -773,9 +773,9 @@ def test_within_units(url, expected):
         ),
     ],
 )
-def test_datetime_is_less_than(url, expected):
+def test_datetime_is_interval_open_start(url, expected):
     edr = EDRQueryParser(url)
-    assert edr.datetime.is_less_than == expected
+    assert edr.datetime.is_interval_open_start == expected
 
 
 @pytest.mark.parametrize(
@@ -795,9 +795,9 @@ def test_datetime_is_less_than(url, expected):
         ),
     ],
 )
-def test_datetime_is_greater_than(url, expected):
+def test_datetime_is_interval_open_end(url, expected):
     edr = EDRQueryParser(url)
-    assert edr.datetime.is_greater_than == expected
+    assert edr.datetime.is_interval_open_end == expected
 
 
 @pytest.mark.parametrize(
@@ -809,19 +809,19 @@ def test_datetime_is_greater_than(url, expected):
         ),
         (
             "https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z",
-            "datetime not a greater than type",
+            "datetime not an interval open end type",
         ),
         (
             "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z",
-            "datetime not a greater than type",
+            "datetime not an interval open end type",
         ),
     ],
 )
-def test_datetime_greater_than(url, expected):
+def test_datetime_interval_open_end(url, expected):
     edr = EDRQueryParser(url)
 
     try:
-        assert edr.datetime.greater_than == expected
+        assert edr.datetime.interval_open_end == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
 
@@ -835,19 +835,19 @@ def test_datetime_greater_than(url, expected):
         ),
         (
             "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F..",
-            "datetime not a less than type",
+            "datetime not an interval open start type",
         ),
         (
             "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z",
-            "datetime not a less than type",
+            "datetime not an interval open start type",
         ),
     ],
 )
-def test_datetime_less_than(url, expected):
+def test_datetime_interval_open_start(url, expected):
     edr = EDRQueryParser(url)
 
     try:
-        assert edr.datetime.less_than == expected
+        assert edr.datetime.interval_open_start == expected
     except ValueError as raisedException:
         assert str(raisedException) == expected
 
