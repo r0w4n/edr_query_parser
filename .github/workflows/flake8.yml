@@ -8,7 +8,6 @@ name: Flake8 Style Guide Enforcement
 # https://github.com/PyCQA/flake8-bugbear
 # https://github.com/dlint-py/dlint
 # https://github.com/datatheorem/flake8-alfred
-# https://github.com/gforcada/flake8-builtins
 # https://github.com/JBKahn/flake8-print
 # https://github.com/m-burst/flake8-pytest-style
 # https://github.com/afonasev/flake8-return
@@ -42,7 +41,7 @@ jobs:
             flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear flake8-isort pep8-naming
             flake8-alfred flake8-print flake8-return flake8-annotations-complexity flake8-if-expr flake8-simplify
             flake8-variables-names dlint flake8-cognitive-complexity flake8-functions flake8-expression-complexity
-            flake8-pytest-style flake8-builtins
+            flake8-pytest-style
           config: ./.flake8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
