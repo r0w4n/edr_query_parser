@@ -4,6 +4,23 @@ name: Flake8 Style Guide Enforcement
 # https://github.com/wemake-services/flake8-eradicate
 # https://github.com/adamchainz/flake8-comprehensions
 # https://github.com/terrencepreilly/darglint
+# https://github.com/tylerwince/flake8-bandit
+# https://github.com/PyCQA/flake8-bugbear
+# https://github.com/dlint-py/dlint
+# https://github.com/datatheorem/flake8-alfred
+# https://github.com/gforcada/flake8-builtins
+# https://github.com/Melevir/flake8-functions-names
+# https://github.com/JBKahn/flake8-print
+# https://github.com/m-burst/flake8-pytest-style
+# https://github.com/afonasev/flake8-return
+# https://github.com/Arkq/flake8-requirements
+# https://github.com/MartinThoma/flake8-simplify
+# https://github.com/best-doctor/flake8-variables-names
+# https://github.com/PyCQA/pep8-naming
+# https://github.com/Melevir/flake8-cognitive-complexity
+# https://github.com/best-doctor/flake8-functions
+# https://github.com/best-doctor/flake8-expression-complexity
+
 
 
 on: [pull_request]
@@ -19,7 +36,10 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install flake8 flake8-eradicate flake8-comprehensions darglint
+        python -m pip install flake8 flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear
+        python -m dlint flake8-alfred flake8-builtins flake8-functions-names flake8-print flake8-pytest-style
+        python -m flake8-return flake8-requirements flake8-simplify flake8-variables-names pep8-naming
+        python -m flake8-cognitive-complexity flake8-functions flake8-expression-complexity
     - name: Run flake8
       uses: suo/flake8-github-action@releases/v1
       with:
