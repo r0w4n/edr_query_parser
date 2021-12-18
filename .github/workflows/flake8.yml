@@ -20,6 +20,10 @@ name: Flake8 Style Guide Enforcement
 # https://github.com/Melevir/flake8-cognitive-complexity
 # https://github.com/best-doctor/flake8-functions
 # https://github.com/best-doctor/flake8-expression-complexity
+# https://github.com/best-doctor/flake8-annotations-complexity
+# https://github.com/afonasev/flake8-if-expr
+# https://github.com/gforcada/flake8-isort
+
 
 #flake8-pytest-style flake8-builtins flake8-requirements
 
@@ -40,10 +44,9 @@ jobs:
           checkName: "Python Lint"
           path: ./
           plugins: >
-            flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear dlint
-            flake8-alfred  flake8-print flake8-return
-            flake8-simplify flake8-variables-names pep8-naming flake8-cognitive-complexity flake8-functions
-            flake8-expression-complexity
+            flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear flake8-isort pep8-naming
+            flake8-alfred flake8-print flake8-return flake8-annotations-complexity flake8-if-expr flake8-simplify
+            flake8-variables-names dlint flake8-cognitive-complexity flake8-functions flake8-expression-complexity
           config: ./.flake8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
