@@ -41,7 +41,9 @@ jobs:
           path: ./
           plugins: >
             flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear dlint
-            flake8-alfred flake8-builtins flake8-functions-names flake8-print flake8-pytest-style
+            flake8-alfred flake8-builtins flake8-print flake8-pytest-style flake8-return flake8-requirements
+            flake8-simplify flake8-variables-names pep8-naming flake8-cognitive-complexity flake8-functions
+            flake8-expression-complexity
           config: ./.flake8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
