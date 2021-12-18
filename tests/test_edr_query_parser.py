@@ -1,6 +1,7 @@
 import pytest
-from edr_query_parser import EDRQueryParser
 from dateutil.parser import isoparse
+
+from edr_query_parser import EDRQueryParser
 
 
 @pytest.mark.parametrize(
