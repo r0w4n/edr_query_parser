@@ -110,7 +110,11 @@ class Parameter:
 class ParameterInt(Parameter):
     def __init__(self, value):
         super().__init__(value)
-        self.value = int(value) if value else None
+
+        if value:
+            self.value = int(value)
+        else:
+            self.value = None
 
 
 class ParameterFloat(Parameter):
