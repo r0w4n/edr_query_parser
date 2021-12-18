@@ -39,7 +39,7 @@ jobs:
         with:
           checkName: "Python Lint"
           path: ./
-          plugins: flake8-spellcheck
+          plugins: flake8-support flake8-eradicate
           config: ./.flake8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
