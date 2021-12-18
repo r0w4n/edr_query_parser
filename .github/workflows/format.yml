@@ -14,7 +14,7 @@ jobs:
           options: "./"
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.x
       - name: order imports
         uses: isort/isort-action@master
         with:
