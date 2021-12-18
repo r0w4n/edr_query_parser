@@ -21,7 +21,7 @@ name: Flake8 Style Guide Enforcement
 # https://github.com/best-doctor/flake8-functions
 # https://github.com/best-doctor/flake8-expression-complexity
 
-
+#flake8-pytest-style flake8-builtins
 
 on: [pull_request]
 
@@ -41,7 +41,7 @@ jobs:
           path: ./
           plugins: >
             flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear dlint
-            flake8-alfred flake8-builtins flake8-print flake8-pytest-style flake8-return flake8-requirements
+            flake8-alfred  flake8-print flake8-return flake8-requirements
             flake8-simplify flake8-variables-names pep8-naming flake8-cognitive-complexity flake8-functions
             flake8-expression-complexity
           config: ./.flake8
