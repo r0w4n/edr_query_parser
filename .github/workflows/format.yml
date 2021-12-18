@@ -19,6 +19,5 @@ jobs:
         uses: isort/isort-action@master
         with:
           configuration: ""
-          configuration: ""
       - name: add commit changes
         uses: EndBug/add-and-commit@v7
