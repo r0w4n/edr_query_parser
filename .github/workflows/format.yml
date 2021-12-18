@@ -17,5 +17,8 @@ jobs:
           python-version: 3.8
       - name: order imports
         uses: isort/isort-action@master
+        with:
+          configuration: ""
+          configuration: ""
       - name: add commit changes
         uses: EndBug/add-and-commit@v7
