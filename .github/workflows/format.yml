@@ -3,7 +3,7 @@ name: Format with Black
 on:
   push:
     branches:
-    - "!main"
+    - !main
 
 jobs:
   format_with_black:
