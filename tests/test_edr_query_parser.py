@@ -359,10 +359,6 @@ def test_coords_wkt(url, expected):
             "z can not be cast to float",
         ),
         (
-            "https://somewhere.com/collections/my_collection/position?z=All",
-            "z can not be cast to float",
-        ),
-        (
             "https://somewhere.com/collections/my_collection/position?z=all",
             "z can not be cast to float",
         ),
