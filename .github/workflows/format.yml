@@ -1,6 +1,10 @@
 name: Format with Black
 
-on: [push]
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
 
 jobs:
   format_with_black:
