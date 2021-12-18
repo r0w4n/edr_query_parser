@@ -39,7 +39,7 @@ jobs:
         with:
           checkName: "Python Lint"
           path: ./
-          plugins: flake8-eradicate flake8-comprehensions
+          plugins: flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear
           config: ./.flake8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
