@@ -39,7 +39,9 @@ jobs:
         with:
           checkName: "Python Lint"
           path: ./
-          plugins: flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear dlint flake8-alfred flake8-builtins flake8-functions-names flake8-print flake8-pytest-style
+          plugins: >
+            flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear dlint
+            flake8-alfred flake8-builtins flake8-functions-names flake8-print flake8-pytest-style
           config: ./.flake8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
