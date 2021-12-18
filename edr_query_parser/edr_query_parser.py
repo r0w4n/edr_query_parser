@@ -1,7 +1,7 @@
-from urllib.parse import urlsplit, parse_qs
 from dateutil.parser import isoparse
 from enum import Enum
 from geomet import wkt
+from urllib.parse import urlsplit, parse_qs
 
 
 def format_date(date):
