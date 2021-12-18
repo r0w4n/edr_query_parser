@@ -5,12 +5,8 @@ name: Flake8 Style Guide Enforcement
 # https://github.com/adamchainz/flake8-comprehensions
 # https://github.com/terrencepreilly/darglint
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-      types: [opened, synchronize, reopened]
+on: [push]
+
 jobs:
   style_enforcer:
     runs-on: ubuntu-latest
