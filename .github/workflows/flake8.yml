@@ -26,26 +26,46 @@ name: Flake8 Style Guide Enforcement
 on: [pull_request]
 
 jobs:
-  style_enforcer:
+  lint:
+    name: Python Lint
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install flake8 flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear
-        python -m pip install dlint flake8-alfred flake8-builtins flake8-functions-names flake8-print flake8-pytest-style
-        python -m pip install flake8-return flake8-requirements flake8-simplify flake8-variables-names pep8-naming
-        python -m pip install flake8-cognitive-complexity flake8-functions flake8-expression-complexity
-    - name: Run flake8
-      uses: suo/flake8-github-action@releases/v1
-      with:
-        checkName: 'style_enforcer'   # NOTE: this needs to be the same as the job name
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Run flake8
+        uses: julianwachholz/flake8-action@v2
+        with:
+          checkName: "Python Lint"
+          path: path/to/files
+          plugins: flake8-spellcheck
+          config: path/to/flake8.ini
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#
+#jobs:
+#  style_enforcer:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - uses: actions/checkout@v2
+#    - uses: actions/setup-python@v2
+#      with:
+#        python-version: '3.10'
+#    - name: Install dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        python -m pip install flake8 flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear
+#        python -m pip install dlint flake8-alfred flake8-builtins flake8-functions-names flake8-print flake8-pytest-style
+#        python -m pip install flake8-return flake8-requirements flake8-simplify flake8-variables-names pep8-naming
+#        python -m pip install flake8-cognitive-complexity flake8-functions flake8-expression-complexity
+#    - name: Run flake8
+#      uses: suo/flake8-github-action@releases/v1
+#      with:
+#        checkName: 'style_enforcer'   # NOTE: this needs to be the same as the job name
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #    - name: Lint with flake8
 #      run: |
 #        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
