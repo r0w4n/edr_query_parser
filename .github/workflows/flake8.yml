@@ -1,0 +1,47 @@
+name: Flake8 Style Guide Enforcement
+
+# https://github.com/mschwager/cohesion#flake8-support
+# https://github.com/wemake-services/flake8-eradicate
+# https://github.com/adamchainz/flake8-comprehensions
+# https://github.com/terrencepreilly/darglint
+# https://github.com/tylerwince/flake8-bandit
+# https://github.com/PyCQA/flake8-bugbear
+# https://github.com/dlint-py/dlint
+# https://github.com/datatheorem/flake8-alfred
+# https://github.com/JBKahn/flake8-print
+# https://github.com/m-burst/flake8-pytest-style
+# https://github.com/afonasev/flake8-return
+# https://github.com/MartinThoma/flake8-simplify
+# https://github.com/best-doctor/flake8-variables-names
+# https://github.com/PyCQA/pep8-naming
+# https://github.com/Melevir/flake8-cognitive-complexity
+# https://github.com/best-doctor/flake8-functions
+# https://github.com/best-doctor/flake8-expression-complexity
+# https://github.com/best-doctor/flake8-annotations-complexity
+# https://github.com/afonasev/flake8-if-expr
+# https://github.com/gforcada/flake8-isort
+
+on: [pull_request]
+
+jobs:
+  lint:
+    name: Python Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Run flake8
+        uses: julianwachholz/flake8-action@v2
+        with:
+          checkName: "Python Lint"
+          path: ./
+          plugins: >
+            flake8-eradicate flake8-comprehensions darglint flake8-bandit flake8-bugbear flake8-isort pep8-naming
+            flake8-alfred flake8-print flake8-return flake8-annotations-complexity flake8-if-expr flake8-simplify
+            flake8-variables-names dlint flake8-cognitive-complexity flake8-functions flake8-expression-complexity
+            flake8-pytest-style
+          config: ./.flake8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

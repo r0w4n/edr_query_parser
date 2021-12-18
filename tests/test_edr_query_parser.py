@@ -1,6 +1,7 @@
 import pytest
-from edr_query_parser import EDRQueryParser
 from dateutil.parser import isoparse
+
+from edr_query_parser import EDRQueryParser
 
 
 @pytest.mark.parametrize(
@@ -20,8 +21,8 @@ def test_collection_name(url, expected):
     edr = EDRQueryParser(url)
     try:
         assert edr.collection_name == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -55,8 +56,8 @@ def test_query_type(url, expected):
     edr = EDRQueryParser(url)
     try:
         assert edr.query_type.value == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -220,8 +221,8 @@ def test_parameter_name(url, expected):
     edr = EDRQueryParser(url)
     try:
         assert edr.parameter_name.list == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -358,10 +359,6 @@ def test_coords_wkt(url, expected):
             "z can not be cast to float",
         ),
         (
-            "https://somewhere.com/collections/my_collection/position?z=All",
-            "z can not be cast to float",
-        ),
-        (
             "https://somewhere.com/collections/my_collection/position?z=all",
             "z can not be cast to float",
         ),
@@ -387,8 +384,8 @@ def test_z_float(url, expected):
     edr = EDRQueryParser(url)
     try:
         assert edr.z.float == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -421,8 +418,8 @@ def test_z_interval_from(url, expected):
     edr = EDRQueryParser(url)
     try:
         assert edr.z.interval_from == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -456,8 +453,8 @@ def test_z_interval_to(url, expected):
 
     try:
         assert edr.z.interval_to == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -523,8 +520,8 @@ def test_z_list(url, expected):
 
     try:
         assert edr.z.list == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -611,8 +608,8 @@ def test_datetime_exact(url, expected):
 
     try:
         assert edr.datetime.exact == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -668,8 +665,8 @@ def test_datetime_interval_from(url, expected):
 
     try:
         assert edr.datetime.interval_from == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -694,8 +691,8 @@ def test_datetime_interval_to(url, expected):
 
     try:
         assert edr.datetime.interval_to == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -716,8 +713,8 @@ def test_bbox(url, expected):
 
     try:
         assert edr.bbox.list == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -822,8 +819,8 @@ def test_datetime_interval_open_end(url, expected):
 
     try:
         assert edr.datetime.interval_open_end == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(
@@ -848,8 +845,8 @@ def test_datetime_interval_open_start(url, expected):
 
     try:
         assert edr.datetime.interval_open_start == expected
-    except ValueError as raisedException:
-        assert str(raisedException) == expected
+    except ValueError as raised_exception:
+        assert str(raised_exception) == expected
 
 
 @pytest.mark.parametrize(

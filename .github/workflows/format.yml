@@ -12,5 +12,12 @@ jobs:
         uses: psf/black@stable
         with:
           options: "./"
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: order imports
+        uses: isort/isort-action@master
+        with:
+          configuration: ""
       - name: add commit changes
         uses: EndBug/add-and-commit@v7

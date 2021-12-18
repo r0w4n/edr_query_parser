@@ -1,0 +1,5 @@
+[flake8]
+
+ignore: E501
+per-file-ignores = tests/*: S101
+pytest-parametrize-names-type = csv

@@ -1,6 +1,6 @@
 .idea/
 venv/
 *.pyc
-edr_query_parser/tests/htmlcov/*
-edr_query_parser/tests/.coverage
+tests/htmlcov/*
+tests/.coverage
 .coverage

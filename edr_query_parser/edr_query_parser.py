@@ -1,6 +1,7 @@
-from urllib.parse import urlsplit, parse_qs
-from dateutil.parser import isoparse
 from enum import Enum
+from urllib.parse import parse_qs, urlsplit
+
+from dateutil.parser import isoparse
 from geomet import wkt
 
 
@@ -109,7 +110,11 @@ class Parameter:
 class ParameterInt(Parameter):
     def __init__(self, value):
         super().__init__(value)
-        self.value = int(value) if value else None
+
+        if value:
+            self.value = int(value)
+        else:
+            self.value = None
 
 
 class ParameterFloat(Parameter):
