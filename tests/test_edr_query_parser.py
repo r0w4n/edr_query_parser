@@ -878,3 +878,77 @@ def test_limit(url, expected):
     edr = EDRQueryParser(url)
 
     assert edr.limit.value == expected
+
+
+@pytest.mark.parametrize(
+    "url, expected",
+    [
+        (
+            "https://somewhere.com/collections/my_collection/corridor?corridor-height=20",
+            20,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor?corridor-height=30",
+            30,
+        ),
+    ],
+)
+def test_corridor_height(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.corridor_height.value == expected
+
+
+@pytest.mark.parametrize(
+    "url, expected",
+    [
+        (
+            "https://somewhere.com/collections/my_collection/corridor?corridor-width=20",
+            20,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor?corridor-width=30",
+            30,
+        ),
+    ],
+)
+def test_corridor_width(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.corridor_width.value == expected
+
+
+@pytest.mark.parametrize(
+    "url, expected",
+    [
+        (
+            "https://somewhere.com/collections/my_collection/corridor?width-units=km",
+            "km",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor/?width-units=m",
+            "m",
+        ),
+        ("https://somewhere.com/collections/my_collection/corridor", None),
+    ],
+)
+def test_width_units(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.width_units.value == expected
+
+
+@pytest.mark.parametrize(
+    "url, expected",
+    [
+        (
+            "https://somewhere.com/collections/my_collection/corridor?height-units=km",
+            "km",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor/?height-units=m",
+            "m",
+        ),
+        ("https://somewhere.com/collections/my_collection/corridor", None),
+    ],
+)
+def test_height_units(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.height_units.value == expected
