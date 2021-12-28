@@ -183,7 +183,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corr
 print(edr_query.corridor_width.value) # "5"
 ```
 
-## within-units Parameter Example
+## width-units Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
