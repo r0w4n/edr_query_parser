@@ -20,6 +20,14 @@ class EDRQueryParser:
             return None
 
     @property
+    def bbox(self):
+        return ParameterWithFloatList(self.query_parts.get("bbox"))
+
+    @property
+    def crs(self):
+        return Parameter(self.query_parts.get("crs"))
+
+    @property
     def collection_name(self):
         try:
             return self.url_parts[self.url_parts.index("collections") + 1]
@@ -27,8 +35,28 @@ class EDRQueryParser:
             raise ValueError("collection name not found in url")
 
     @property
-    def query_type(self):
-        return QueryTypes(self.is_instances, self.url_parts)
+    def coords(self):
+        return Coords(self.query_parts.get("coords"))
+
+    @property
+    def corridor_height(self):
+        return ParameterFloat(self.query_parts.get("corridor-height"))
+
+    @property
+    def corridor_width(self):
+        return ParameterFloat(self.query_parts.get("corridor-width"))
+
+    @property
+    def datetime(self):
+        return DateTime(self.query_parts.get("datetime"))
+
+    @property
+    def format(self):
+        return Parameter(self.query_parts.get("f"))
+
+    @property
+    def instances_id(self):
+        return self._get_id("instances")
 
     @property
     def is_instances(self):
@@ -39,40 +67,28 @@ class EDRQueryParser:
         return self._get_id("items")
 
     @property
+    def limit(self):
+        return ParameterInt(self.query_parts.get("limit"))
+
+    @property
     def locations_id(self):
         return self._get_id("locations")
 
     @property
-    def instances_id(self):
-        return self._get_id("instances")
-
-    @property
-    def format(self):
-        return Parameter(self.query_parts.get("f"))
-
-    @property
-    def coords(self):
-        return Coords(self.query_parts.get("coords"))
-
-    @property
-    def crs(self):
-        return Parameter(self.query_parts.get("crs"))
+    def next(self):
+        return Parameter(self.query_parts.get("next"))
 
     @property
     def parameter_name(self):
         return ParameterWithList(self.query_parts.get("parameter-name"))
 
     @property
-    def datetime(self):
-        return DateTime(self.query_parts.get("datetime"))
+    def query_type(self):
+        return QueryTypes(self.is_instances, self.url_parts)
 
     @property
-    def z(self):
-        return Z(self.query_parts.get("z"))
-
-    @property
-    def bbox(self):
-        return ParameterWithFloatList(self.query_parts.get("bbox"))
+    def width_units(self):
+        return Parameter(self.query_parts.get("within"))
 
     @property
     def within(self):
@@ -83,12 +99,8 @@ class EDRQueryParser:
         return Parameter(self.query_parts.get("within-units"))
 
     @property
-    def next(self):
-        return Parameter(self.query_parts.get("next"))
-
-    @property
-    def limit(self):
-        return ParameterInt(self.query_parts.get("limit"))
+    def z(self):
+        return Z(self.query_parts.get("z"))
 
 
 class Parameter:
