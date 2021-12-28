@@ -147,7 +147,7 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 print(edr_query.bbox.list) # [12.0, 13.0, 20.0, 21.0]
 ```
 
-## Pagination Limit Parameter Example
+## Pagination limit Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -156,11 +156,38 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/item
 print(edr_query.limit.value) # 100
 ```
 
-## Pagination Next Parameter Example
+## Pagination next Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items?next=token123')
 
 print(edr_query.next.value) # "token123"
+```
+
+## corridor-height Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?corridor-height=12&corridor-width=5')
+
+print(edr_query.corridor_height.value) # "12"
+```
+
+## corridor-width Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?corridor-height=12&corridor-width=5')
+
+print(edr_query.corridor_width.value) # "5"
+```
+
+## within-units Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?width-units=km')
+
+print(edr_query.width_units.value) # "km"
 ```

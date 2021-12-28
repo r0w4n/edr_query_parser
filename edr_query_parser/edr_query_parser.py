@@ -88,7 +88,7 @@ class EDRQueryParser:
 
     @property
     def width_units(self):
-        return Parameter(self.query_parts.get("within"))
+        return Parameter(self.query_parts.get("width-units"))
 
     @property
     def within(self):
