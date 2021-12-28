@@ -200,3 +200,21 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corr
 
 print(edr_query.height_units.value) # "km"
 ```
+
+## within Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/radius?within=10&within-units=km')
+
+print(edr_query.within.value) # "10"
+```
+
+## within-units Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/radius?within=10&within-units=km')
+
+print(edr_query.within_units.value) # "km"
+```
