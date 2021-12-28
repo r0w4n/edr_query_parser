@@ -949,6 +949,6 @@ def test_width_units(url, expected):
         ("https://somewhere.com/collections/my_collection/corridor", None),
     ],
 )
-def test_width_units(url, expected):
+def test_height_units(url, expected):
     edr = EDRQueryParser(url)
     assert edr.height_units.value == expected
