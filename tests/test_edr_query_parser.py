@@ -933,3 +933,22 @@ def test_corridor_width(url, expected):
 def test_width_units(url, expected):
     edr = EDRQueryParser(url)
     assert edr.width_units.value == expected
+
+
+@pytest.mark.parametrize(
+    "url, expected",
+    [
+        (
+            "https://somewhere.com/collections/my_collection/corridor?height-units=km",
+            "km",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor/?height-units=m",
+            "m",
+        ),
+        ("https://somewhere.com/collections/my_collection/corridor", None),
+    ],
+)
+def test_width_units(url, expected):
+    edr = EDRQueryParser(url)
+    assert edr.height_units.value == expected

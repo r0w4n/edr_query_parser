@@ -191,3 +191,12 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corr
 
 print(edr_query.width_units.value) # "km"
 ```
+
+## height-units Parameter Example
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?height-units=km')
+
+print(edr_query.height_units.value) # "km"
+```

@@ -55,6 +55,10 @@ class EDRQueryParser:
         return Parameter(self.query_parts.get("f"))
 
     @property
+    def height_units(self):
+        return Parameter(self.query_parts.get("height-units"))
+
+    @property
     def instances_id(self):
         return self._get_id("instances")
 
