@@ -5,13 +5,6 @@ from dateutil.parser import isoparse
 from geomet import wkt
 
 
-def format_date(date):
-    try:
-        return isoparse(date)
-    except ValueError:
-        raise ValueError("Datetime format not recognised")
-
-
 class EDRQueryParser:
     def __init__(self, url):
         self.url_parts = list(filter(None, urlsplit(url).path.split("/")))
@@ -165,17 +158,24 @@ class ParameterWithInterval(Parameter):
 
 
 class DateTime(ParameterWithInterval):
+    @staticmethod
+    def _format_date(date):
+        try:
+            return isoparse(date)
+        except ValueError:
+            raise ValueError("Datetime format not recognised")
+
     @property
     def interval_from(self):
-        return format_date(super().interval_from)
+        return self._format_date(super().interval_from)
 
     @property
     def interval_to(self):
-        return format_date(super().interval_to)
+        return self._format_date(super().interval_to)
 
     @property
     def exact(self):
-        return format_date(self.value)
+        return self._format_date(self.value)
 
     @property
     def is_interval_open_end(self):
@@ -188,13 +188,13 @@ class DateTime(ParameterWithInterval):
     @property
     def interval_open_end(self):
         if self.is_interval_open_end:
-            return format_date(self.value.replace("/..", ""))
+            return self._format_date(self.value.replace("/..", ""))
         raise ValueError("datetime not an interval open end type")
 
     @property
     def interval_open_start(self):
         if self.is_interval_open_start:
-            return format_date(self.value.replace("../", ""))
+            return self._format_date(self.value.replace("../", ""))
         raise ValueError("datetime not an interval open start type")
 
 
