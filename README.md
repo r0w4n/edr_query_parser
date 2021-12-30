@@ -111,7 +111,9 @@ if edr_query.parameter_name.is_set:
 
 ## datetime Example
 
-The EDR query parser returns a [dateutil](http://labix.org/python-dateutil) object
+The EDR query parser returns a [dateutil](
+    https://github.com/dateutil/dateutil/
+) object
 
 ```python
 from edr_query_parser import EDRQueryParser
