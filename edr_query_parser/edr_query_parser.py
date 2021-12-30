@@ -257,7 +257,7 @@ class Coords(Parameter):
         return self.wkt["coordinates"]
 
 
-class QueryTypes(Parameter):
+class QueryTypes():
     QUERY_TYPES = Enum(
         "query_type", "position radius area cube trajectory corridor items locations"
     )
