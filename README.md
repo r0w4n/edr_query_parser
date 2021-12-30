@@ -2,12 +2,23 @@
 
 The [OGC API Environmental Data Retrieval](https://github.com/opengeospatial/ogcapi-environmental-data-retrieval) query parser makes it easy to parse and use the API query.
 
-[![PyPI](https://img.shields.io/pypi/v/edr-query-parser)](https://pypi.org/project/edr-query-parser/)
-![PyPI - License](https://img.shields.io/pypi/l/edr-query-parser)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/edr-query-parser)
-[![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/r0w4n_edr_query_parser?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/summary/new_code?id=r0w4n_edr_query_parser)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Codecov](https://img.shields.io/codecov/c/github/r0w4n/edr_query_parser)](https://app.codecov.io/gh/r0w4n/edr_query_parser)
+[![PyPI](
+    https://img.shields.io/pypi/v/edr-query-parser
+)](https://pypi.org/project/edr-query-parser/)
+[![PyPI - License](
+    https://img.shields.io/pypi/l/edr-query-parser)
+](https://github.com/r0w4n/edr_query_parser/blob/main/LICENSE)
+![PyPI - Python Version](
+    https://img.shields.io/pypi/pyversions/edr-query-parser)
+[![Sonar Quality Gate](
+    https://img.shields.io/sonar/quality_gate/r0w4n_edr_query_parser?server=https%3A%2F%2Fsonarcloud.io
+)](https://sonarcloud.io/summary/new_code?id=r0w4n_edr_query_parser)
+[![Code style: black](
+    https://img.shields.io/badge/code%20style-black-000000.svg
+)](https://github.com/psf/black)
+[![Codecov](
+    https://img.shields.io/codecov/c/github/r0w4n/edr_query_parser
+)](https://app.codecov.io/gh/r0w4n/edr_query_parser)
 
 ## Install
 
