@@ -1,4 +1,4 @@
-name: Format with Black
+name: Format with black and isort
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - '!main'
 
 jobs:
-  format_with_black:
+  format_code:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
