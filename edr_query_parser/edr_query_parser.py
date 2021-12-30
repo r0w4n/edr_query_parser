@@ -1,10 +1,10 @@
 from enum import Enum
+from typing import Optional
 from urllib.parse import parse_qs, urlsplit
 
 import dateutil
 from dateutil.parser import isoparse
 from geomet import wkt
-from typing import Optional
 
 
 class EDRQueryParser:
