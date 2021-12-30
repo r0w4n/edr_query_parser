@@ -100,7 +100,8 @@ if edr_query.coords.is_set:
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/'
+                           'position?coords=POINT(57.819 -3.966)'
                            '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
                            '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=all')
 
