@@ -1,4 +1,4 @@
-name: markdownlint
+name: Markdown Linter
 
 on: [push, pull_request]
 
