@@ -9,6 +9,7 @@ The [OGC API Environmental Data Retrieval](https://github.com/opengeospatial/ogc
 [![Codecov](https://img.shields.io/codecov/c/github/r0w4n/edr_query_parser)](https://app.codecov.io/gh/r0w4n/edr_query_parser)
 
 # Install
+
 ```shell
 pip install edr-query-parser
 ```
@@ -16,6 +17,7 @@ pip install edr-query-parser
 # Usage
 
 ## Collection Name Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2'
@@ -26,6 +28,7 @@ print(edr_query.collection_name) #my_collection
 ```
 
 ## Query Type Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -48,6 +51,7 @@ else:
 ```
 
 ## location ID Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -60,6 +64,7 @@ if edr_query.query_type.is_locations:
 ```
 
 ## coords Example
+
 The EDR query parser returns a [WKT](https://github.com/geomet/geomet) object
 ```python
 from edr_query_parser import EDRQueryParser
@@ -76,6 +81,7 @@ if edr_query.coords.is_set:
 ```
 
 ## parameter-name Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -88,6 +94,7 @@ if edr_query.parameter_name.is_set:
 ```
 
 ## datetime Example
+
 The EDR query parser returns a [dateutil](http://labix.org/python-dateutil) object
 
 ```python
@@ -121,6 +128,7 @@ print(edr_query.format.value) # geoJSON
 ```
 
 ## z Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -136,6 +144,7 @@ if edr_query.z.is_set:
 ```
 
 ## crs Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -156,6 +165,7 @@ print(edr_query.bbox.list) # [12.0, 13.0, 20.0, 21.0]
 ```
 
 ## Pagination limit Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -165,6 +175,7 @@ print(edr_query.limit.value) # 100
 ```
 
 ## Pagination next Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -174,6 +185,7 @@ print(edr_query.next.value) # "token123"
 ```
 
 ## corridor-height Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -184,6 +196,7 @@ print(edr_query.corridor_height.value) # "12"
 ```
 
 ## corridor-width Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -194,6 +207,7 @@ print(edr_query.corridor_width.value) # "5"
 ```
 
 ## width-units Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -203,6 +217,7 @@ print(edr_query.width_units.value) # "km"
 ```
 
 ## height-units Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -212,6 +227,7 @@ print(edr_query.height_units.value) # "km"
 ```
 
 ## within Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
