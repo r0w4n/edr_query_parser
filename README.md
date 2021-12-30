@@ -116,7 +116,8 @@ The EDR query parser returns a [dateutil](http://labix.org/python-dateutil) obje
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/'
+                           'position?coords=POINT(57.819 -3.966)'
                            '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
                            '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=all')
 
@@ -148,7 +149,8 @@ print(edr_query.format.value) # geoJSON
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/'
+                           'position?coords=POINT(57.819 -3.966)'
                            '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
                            '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=12/240')
 
@@ -164,7 +166,8 @@ if edr_query.z.is_set:
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/'
+                           'position?coords=POINT(57.819 -3.966)'
                            '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
                            '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=12/240')
 
