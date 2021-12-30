@@ -8,6 +8,7 @@ The [OGC API Environmental Data Retrieval](https://github.com/opengeospatial/ogc
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Codecov](https://img.shields.io/codecov/c/github/r0w4n/edr_query_parser)](https://app.codecov.io/gh/r0w4n/edr_query_parser)
 
+
 # Install
 
 ```shell
@@ -66,6 +67,7 @@ if edr_query.query_type.is_locations:
 ## coords Example
 
 The EDR query parser returns a [WKT](https://github.com/geomet/geomet) object
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -113,8 +115,8 @@ if edr_query.datetime.is_set:
         print(edr_query.datetime.interval_open_start.timestamp())
     else:
         print(edr_query.datetime.exact.timestamp())
-
 ```
+
 ## f Parameter Example
 
 ```python
@@ -156,6 +158,7 @@ print(edr_query.crs.value) # 84
 ```
 
 ## bbox Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
@@ -237,6 +240,7 @@ print(edr_query.within.value) # "10"
 ```
 
 ## within-units Parameter Example
+
 ```python
 from edr_query_parser import EDRQueryParser
 
