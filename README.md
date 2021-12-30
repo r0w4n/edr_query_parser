@@ -36,6 +36,12 @@ if edr_query.is_instances:
 else:
     print(edr_query.query_type.is_position) # True
     print(edr_query.query_type.is_radius) # False
+    print(edr_query.query_type.is_locations) # False
+    print(edr_query.query_type.is_corridor) # False
+    print(edr_query.query_type.is_area) # False
+    print(edr_query.query_type.is_trajectory) # False
+    print(edr_query.query_type.is_cube) # False
+    print(edr_query.query_type.is_items) # False
     print(edr_query.query_type.value) # position
 ```
 
@@ -46,7 +52,7 @@ from edr_query_parser import EDRQueryParser
 edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/locations/aberdeen?parameter-name='
                             'param1,param2&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
 
-if edr_query.is_locations:
+if edr_query.query_type.is_locations:
     print(edr_query.locations_id) #aberdeen
 
 ```
