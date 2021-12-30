@@ -1,6 +1,8 @@
 name: Markdown Linter
 
 on:
+  pull_request:
+      types: [opened, synchronize, reopened]
   push:
     branches:
       - '*'
