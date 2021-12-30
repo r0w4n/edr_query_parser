@@ -18,8 +18,9 @@ pip install edr-query-parser
 ## Collection Name Example
 ```python
 from edr_query_parser import EDRQueryParser
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2&coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2'
+                           '&coords=POINT(57.819 -3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&f=geoJSON&crs=84&z=500/400')
 
 print(edr_query.collection_name) #my_collection
 ```
@@ -28,8 +29,9 @@ print(edr_query.collection_name) #my_collection
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2&coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2'
+                           '&coords=POINT(57.819 -3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&f=geoJSON&crs=84&z=500/400')
 
 if edr_query.is_instances:
     print(edr_query.instances_id)
@@ -49,12 +51,12 @@ else:
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/locations/aberdeen?parameter-name='
-                            'param1,param2&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/locations/aberdeen?'
+                           'parameter-name=param1,param2&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&'
+                           'f=geoJSON&crs=84&z=500/400')
 
 if edr_query.query_type.is_locations:
     print(edr_query.locations_id) #aberdeen
-
 ```
 
 ## coords Example
@@ -62,25 +64,25 @@ The EDR query parser returns a [WKT](https://github.com/geomet/geomet) object
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
-                           'parameter2&f=geoJSON&crs=84&z=all')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?'
+                           'coords=POINT(57.819 -3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=all')
 
 if edr_query.coords.is_set:
     print(edr_query.coords.coords_type) # Point
     if edr_query.coords.coords_type == 'Point':
         print(edr_query.coords.coordinates[0]) # 57.819
         print(edr_query.coords.coordinates[1]) # -3.966
-        
 ```
 
 ## parameter-name Example
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
-                           'parameter2&f=geoJSON&crs=84&z=all')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+                           '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=all')
+
 if edr_query.parameter_name.is_set:
     print(edr_query.parameter_name.list) # [parameter1, parameter2]
 ```
@@ -91,9 +93,9 @@ The EDR query parser returns a [dateutil](http://labix.org/python-dateutil) obje
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
-                           'parameter2&f=geoJSON&crs=84&z=all')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+                           '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=all')
 
 if edr_query.datetime.is_set:
     if edr_query.datetime.is_interval:
@@ -111,8 +113,9 @@ if edr_query.datetime.is_set:
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2&coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&f=geoJSON&crs=84&z=500/400')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?parameter-name=param1,param2'
+                           '&coords=POINT(57.819 -3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&f=geoJSON&crs=84&z=500/400')
 
 print(edr_query.format.value) # geoJSON
 ```
@@ -121,25 +124,24 @@ print(edr_query.format.value) # geoJSON
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
-                           'parameter2&f=geoJSON&crs=84&z=12/240')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+                           '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=12/240')
 
 if edr_query.z.is_set:
     if edr_query.z.is_interval:
         print(edr_query.z.interval_from, edr_query.z.interval_to)
     if edr_query.z.is_list:
         print(edr_query.z.interval_from, edr_query.z.list)
-
 ```
 
 ## crs Parameter Example
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 '
-                           '-3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00&parameter-name=parameter1,'
-                           'parameter2&f=geoJSON&crs=84&z=12/240')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/position?coords=POINT(57.819 -3.966)'
+                           '&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
+                           '&parameter-name=parameter1,parameter2&f=geoJSON&crs=84&z=12/240')
 
 print(edr_query.crs.value) # 84
 ```
@@ -175,7 +177,8 @@ print(edr_query.next.value) # "token123"
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?corridor-height=12&corridor-width=5')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?corridor-height=12'
+                           '&corridor-width=5')
 
 print(edr_query.corridor_height.value) # "12"
 ```
@@ -184,7 +187,8 @@ print(edr_query.corridor_height.value) # "12"
 ```python
 from edr_query_parser import EDRQueryParser
 
-edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?corridor-height=12&corridor-width=5')
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/corridor?corridor-height=12'
+                           '&corridor-width=5')
 
 print(edr_query.corridor_width.value) # "5"
 ```
