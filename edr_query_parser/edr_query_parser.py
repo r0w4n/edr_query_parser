@@ -1,8 +1,10 @@
 from enum import Enum
 from urllib.parse import parse_qs, urlsplit
 
+import dateutil
 from dateutil.parser import isoparse
 from geomet import wkt
+from typing import Optional
 
 
 class EDRQueryParser:
@@ -28,7 +30,7 @@ class EDRQueryParser:
         return Parameter(self.query_parts.get("crs"))
 
     @property
-    def collection_name(self):
+    def collection_name(self) -> str:
         try:
             return self.url_parts[self.url_parts.index("collections") + 1]
         except (ValueError, IndexError):
@@ -59,15 +61,15 @@ class EDRQueryParser:
         return Parameter(self.query_parts.get("height-units"))
 
     @property
-    def instances_id(self):
+    def instances_id(self) -> Optional[str]:
         return self._get_id("instances")
 
     @property
-    def is_instances(self):
+    def is_instances(self) -> bool:
         return self.url_parts[self.url_parts.index("collections") + 2] == "instances"
 
     @property
-    def items_id(self):
+    def items_id(self) -> Optional[str]:
         return self._get_id("items")
 
     @property
@@ -75,7 +77,7 @@ class EDRQueryParser:
         return ParameterInt(self.query_parts.get("limit"))
 
     @property
-    def locations_id(self):
+    def locations_id(self) -> Optional[str]:
         return self._get_id("locations")
 
     @property
@@ -112,7 +114,7 @@ class Parameter:
         self.value = value
 
     @property
-    def is_set(self):
+    def is_set(self) -> bool:
         return self.value is not None
 
 
@@ -134,20 +136,20 @@ class ParameterFloat(Parameter):
 
 class ParameterWithList(Parameter):
     @property
-    def list(self):
+    def list(self) -> list:
         try:
             return [parameter.strip(" ") for parameter in self.value.split(",")]
         except (ValueError, AttributeError):
             raise ValueError("could not convert parameter to a list")
 
     @property
-    def is_list(self):
+    def is_list(self) -> bool:
         return self.is_set and "," in self.value
 
 
 class ParameterWithFloatList(ParameterWithList):
     @property
-    def list(self):
+    def list(self) -> list:
         try:
             return list(map(float, super().list))
         except ValueError:
@@ -161,54 +163,54 @@ class ParameterWithInterval(Parameter):
         return None
 
     @property
-    def is_interval(self):
+    def is_interval(self) -> bool:
         return self.value is not None and "/" in self.value
 
     @property
-    def interval_from(self):
+    def interval_from(self) -> str:
         return self._split(0)
 
     @property
-    def interval_to(self):
+    def interval_to(self) -> str:
         return self._split(1)
 
 
 class DateTime(ParameterWithInterval):
     @staticmethod
-    def _format_date(date):
+    def _format_date(date) -> dateutil:
         try:
             return isoparse(date)
         except ValueError:
             raise ValueError("Datetime format not recognised")
 
     @property
-    def interval_from(self):
+    def interval_from(self) -> dateutil:
         return self._format_date(super().interval_from)
 
     @property
-    def interval_to(self):
+    def interval_to(self) -> dateutil:
         return self._format_date(super().interval_to)
 
     @property
-    def exact(self):
+    def exact(self) -> dateutil:
         return self._format_date(self.value)
 
     @property
-    def is_interval_open_end(self):
+    def is_interval_open_end(self) -> bool:
         return self.value.endswith("/..")
 
     @property
-    def is_interval_open_start(self):
+    def is_interval_open_start(self) -> bool:
         return self.value.startswith("../")
 
     @property
-    def interval_open_end(self):
+    def interval_open_end(self) -> dateutil:
         if self.is_interval_open_end:
             return self._format_date(self.value.replace("/..", ""))
         raise ValueError("datetime not an interval open end type")
 
     @property
-    def interval_open_start(self):
+    def interval_open_start(self) -> dateutil:
         if self.is_interval_open_start:
             return self._format_date(self.value.replace("../", ""))
         raise ValueError("datetime not an interval open start type")
@@ -216,46 +218,46 @@ class DateTime(ParameterWithInterval):
 
 class Z(ParameterWithFloatList, ParameterWithInterval):
     @property
-    def float(self):
+    def float(self) -> float:
         try:
             return float(self.value)
         except (TypeError, ValueError):
             raise ValueError("z can not be cast to float")
 
     @property
-    def interval_from(self):
+    def interval_from(self) -> float:
         try:
             return float(super().interval_from)
         except TypeError:
             raise ValueError("unable to get z from value")
 
     @property
-    def interval_to(self):
+    def interval_to(self) -> float:
         try:
             return float(super().interval_to)
         except TypeError:
             raise ValueError("unable to get z to value")
 
     @property
-    def is_all(self):
+    def is_all(self) -> bool:
         return self.is_set and self.value.lower() == "all"
 
 
 class Coords(Parameter):
     @property
-    def wkt(self):
+    def wkt(self) -> wkt:
         return wkt.loads(self.value)
 
     @property
-    def coords_type(self):
+    def coords_type(self) -> str:
         return self.wkt["type"]
 
     @property
-    def coordinates(self):
+    def coordinates(self) -> list:
         return self.wkt["coordinates"]
 
 
-class QueryTypes:
+class QueryTypes(Parameter):
     QUERY_TYPES = Enum(
         "query_type", "position radius area cube trajectory corridor items locations"
     )
@@ -272,37 +274,37 @@ class QueryTypes:
             raise ValueError("unsupported query type found in url")
 
     @property
-    def value(self):
+    def value(self) -> str:
         return self.query_type
 
     @property
-    def is_position(self):
+    def is_position(self) -> bool:
         return self.query_type == "position"
 
     @property
-    def is_radius(self):
+    def is_radius(self) -> bool:
         return self.query_type == "radius"
 
     @property
-    def is_area(self):
+    def is_area(self) -> bool:
         return self.query_type == "area"
 
     @property
-    def is_cube(self):
+    def is_cube(self) -> bool:
         return self.query_type == "cube"
 
     @property
-    def is_trajectory(self):
+    def is_trajectory(self) -> bool:
         return self.query_type == "trajectory"
 
     @property
-    def is_corridor(self):
+    def is_corridor(self) -> bool:
         return self.query_type == "corridor"
 
     @property
-    def is_items(self):
+    def is_items(self) -> bool:
         return self.query_type == "items"
 
     @property
-    def is_locations(self):
+    def is_locations(self) -> bool:
         return self.query_type == "locations"
