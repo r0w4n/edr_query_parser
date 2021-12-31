@@ -215,6 +215,10 @@ def test_is_instances(url, expected):
             "https://somewhere.com/collections/my_collection/locations/my_locations?parameter-name=parameter1",
             ["parameter1"],
         ),
+        (
+            "https://somewhere.com/collections/my_collection/locations/my_locations?",
+            None,
+        ),
     ],
 )
 def test_parameter_name(url, expected):
@@ -238,6 +242,7 @@ def test_parameter_name(url, expected):
             "https://somewhere.com/collections/my_collection/items/my_item?parameter-name=&something=1",
             "my_item",
         ),
+        ("https://somewhere.com/collections/my_collection/position", None),
     ],
 )
 def test_items_id(url, expected):
@@ -258,6 +263,7 @@ def test_items_id(url, expected):
             "https://somewhere.com/collections/my_collection/locations/my_location?parameter-name=&something=1",
             "my_location",
         ),
+        ("https://somewhere.com/collections/my_collection/position", None),
     ],
 )
 def test_locations_id(url, expected):
@@ -277,6 +283,10 @@ def test_locations_id(url, expected):
         (
             "https://somewhere.com/collections/my_collection/instances/my_instance?parameter-name=&something=1",
             "my_instance",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/my_collection/?parameter-name=&something=1",
+            None,
         ),
     ],
 )
@@ -557,6 +567,14 @@ def test_z_is_interval(url, expected):
                 [51.5, -0.1],
             ],
         ),
+        (
+            "https://somewhere.com/collections/my_collection/position?coords=",
+            None,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?",
+            None,
+        ),
     ],
 )
 def test_coords_coordinates(url, expected):
@@ -574,6 +592,14 @@ def test_coords_coordinates(url, expected):
         (
             "https://somewhere.com/collections/my_collection/position?coords=MULTIPOINT((38.9 -77),(48.85 2.35),(39.92 116.38),(-35.29 149.1),(51.5 -0.1))",
             "MultiPoint",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?",
+            None,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?coords=",
+            None,
         ),
     ],
 )
@@ -684,6 +710,10 @@ def test_datetime_interval_from(url, expected):
             "https://somewhere.com/collections/my_collection/position?datetime=2018-03-12T23%3A20%3A52Z/3422-23423-234",
             "Datetime format not recognised",
         ),
+        (
+            "https://somewhere.com/collections/my_collection/position?",
+            "Datetime format not recognised",
+        ),
     ],
 )
 def test_datetime_interval_to(url, expected):
@@ -705,6 +735,14 @@ def test_datetime_interval_to(url, expected):
         (
             "https://somewhere.com/collections/my_collection/position?bbox=1,10,20,a",
             "could not convert parameter to a list",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?bbox=",
+            None,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?",
+            None,
         ),
     ],
 )
@@ -728,6 +766,14 @@ def test_bbox(url, expected):
             "https://somewhere.com/collections/my_collection/position?within=30&within-units=km",
             30,
         ),
+        (
+            "https://somewhere.com/collections/my_collection/position?within=&within-units=km",
+            None,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?&within-units=km",
+            None,
+        ),
     ],
 )
 def test_within(url, expected):
@@ -745,6 +791,14 @@ def test_within(url, expected):
         (
             "https://somewhere.com/collections/my_collection/position?within=30&within-units=miles",
             "miles",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?within=30&within-units=",
+            None,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?within=30",
+            None,
         ),
     ],
 )
@@ -766,6 +820,10 @@ def test_within_units(url, expected):
         ),
         (
             "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z",
+            False,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position?",
             False,
         ),
     ],
@@ -790,6 +848,10 @@ def test_datetime_is_interval_open_start(url, expected):
             "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z",
             False,
         ),
+        (
+            "https://somewhere.com/collections/my_collection/position",
+            False,
+        ),
     ],
 )
 def test_datetime_is_interval_open_end(url, expected):
@@ -810,6 +872,10 @@ def test_datetime_is_interval_open_end(url, expected):
         ),
         (
             "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z",
+            "datetime not an interval open end type",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position",
             "datetime not an interval open end type",
         ),
     ],
@@ -836,6 +902,10 @@ def test_datetime_interval_open_end(url, expected):
         ),
         (
             "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z",
+            "datetime not an interval open start type",
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/position",
             "datetime not an interval open start type",
         ),
     ],
@@ -891,6 +961,14 @@ def test_limit(url, expected):
             "https://somewhere.com/collections/my_collection/corridor?corridor-height=30",
             30,
         ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor?corridor-height=",
+            None,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor",
+            None,
+        ),
     ],
 )
 def test_corridor_height(url, expected):
@@ -908,6 +986,14 @@ def test_corridor_height(url, expected):
         (
             "https://somewhere.com/collections/my_collection/corridor?corridor-width=30",
             30,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor?corridor-width=",
+            None,
+        ),
+        (
+            "https://somewhere.com/collections/my_collection/corridor",
+            None,
         ),
     ],
 )
@@ -928,6 +1014,10 @@ def test_corridor_width(url, expected):
             "m",
         ),
         ("https://somewhere.com/collections/my_collection/corridor", None),
+        (
+            "https://somewhere.com/collections/my_collection/corridor/?width-units=",
+            None,
+        ),
     ],
 )
 def test_width_units(url, expected):
@@ -947,6 +1037,10 @@ def test_width_units(url, expected):
             "m",
         ),
         ("https://somewhere.com/collections/my_collection/corridor", None),
+        (
+            "https://somewhere.com/collections/my_collection/corridor/?height-units=",
+            None,
+        ),
     ],
 )
 def test_height_units(url, expected):
