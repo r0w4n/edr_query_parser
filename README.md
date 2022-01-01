@@ -109,10 +109,11 @@ if edr_query.parameter_name.is_set:
     print(edr_query.parameter_name.list) # [parameter1, parameter2]
 ```
 
-## datetime Example
+## datetime Parameter Example
 
-The EDR query parser returns a [dateutil](
-    https://github.com/dateutil/dateutil/
+The EDR query parser converts the datetime parameter into a number of properties
+with the date properties being expressed as a [datetime](
+    https://docs.python.org/3/library/datetime.html
 ) object
 
 ```python
