@@ -15,7 +15,7 @@ class EDRURL:
             for key, value in parse_qs(urlsplit(url).query).items()
         }
 
-    def get_path_id(self, query_id):
+    def get_path_id(self, query_id) -> Optional[str]:
         try:
             return self._url_parts[self._url_parts.index(query_id) + 1]
         except (IndexError, ValueError):
@@ -27,8 +27,14 @@ class EDRURL:
     def get_path_part(self, index, advance) -> str:
         return self._url_parts[self._url_parts.index(index) + advance]
 
-    def get_last_path_part(self):
-        return self._url_parts[-1]
+    def get_query_type(self):
+        if self.is_instances():
+            return self._url_parts[-1]
+        else:
+            return self.get_path_part("collections", 2)
+
+    def is_instances(self):
+        return self.get_path_part("collections", 2) == "instances"
 
 
 class EDRQueryParser:
@@ -80,7 +86,7 @@ class EDRQueryParser:
 
     @property
     def is_instances(self) -> bool:
-        return self._url.get_path_part("collections", 2) == "instances"
+        return self._url.is_instances()
 
     @property
     def items_id(self) -> Optional[str]:
@@ -104,11 +110,7 @@ class EDRQueryParser:
 
     @property
     def query_type(self):
-        if self.is_instances:
-            query_type = self._url.get_last_path_part()
-        else:
-            query_type = self._url.get_path_part("collections", 2)
-        return QueryType(query_type)
+        return QueryType(self._url.get_query_type())
 
     @property
     def width_units(self):

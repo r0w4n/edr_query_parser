@@ -1062,35 +1062,40 @@ def test_datetime_interval_to_type():
     edr_query = EDRQueryParser(
         "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z",
     )
-    assert type(edr_query.datetime.interval_to) == datetime
+
+    assert isinstance(edr_query.datetime.interval_to, datetime)
 
 
 def test_datetime_interval_from_type():
     edr_query = EDRQueryParser(
         "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z/2018-03-12T23%3A20%3A52Z",
     )
-    assert type(edr_query.datetime.interval_from) == datetime
+
+    assert isinstance(edr_query.datetime.interval_from, datetime)
 
 
 def test_datetime_exact_type():
     edr_query = EDRQueryParser(
         "https://somewhere.com/collections/my_collection/position?datetime=2019-09-07T15:50-04:00"
     )
-    assert type(edr_query.datetime.exact) == datetime
+
+    assert isinstance(edr_query.datetime.exact, datetime)
 
 
 def test_datetime_interval_open_start_type():
     edr_query = EDRQueryParser(
         "https://somewhere.com/collections/my_collection/position?datetime=..%2F2018-02-12T23%3A20%3A52Z"
     )
-    assert type(edr_query.datetime.interval_open_start) == datetime
+
+    assert isinstance(edr_query.datetime.interval_open_start, datetime)
 
 
 def test_datetime_interval_open_end_type():
     edr_query = EDRQueryParser(
         "https://somewhere.com/collections/my_collection/position?datetime=2018-02-12T23%3A20%3A52Z%2F.."
     )
-    assert type(edr_query.datetime.interval_open_end) == datetime
+
+    assert isinstance(edr_query.datetime.interval_open_end, datetime)
 
 
 def test_coords_wkt_type():
@@ -1098,7 +1103,7 @@ def test_coords_wkt_type():
         "https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)"
     )
 
-    assert type(edr_query.coords.wkt) == dict
+    assert isinstance(edr_query.coords.wkt, dict)
 
 
 def test_coords_coords_type_type():
@@ -1106,7 +1111,7 @@ def test_coords_coords_type_type():
         "https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)"
     )
 
-    assert type(edr_query.coords.coords_type) == str
+    assert isinstance(edr_query.coords.coords_type, str)
 
 
 def test_coords_coordinates_type():
@@ -1114,7 +1119,7 @@ def test_coords_coordinates_type():
         "https://somewhere.com/collections/my_collection/position?coords=POINT(0 51.48)"
     )
 
-    assert type(edr_query.coords.coordinates) == list
+    assert isinstance(edr_query.coords.coordinates, list)
 
 
 def test_z_interval_from_type():
