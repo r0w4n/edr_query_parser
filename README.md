@@ -111,7 +111,8 @@ if edr_query.parameter_name.is_set:
 
 ## datetime Parameter Example
 
-The EDR query parser converts the datetime parameter into a number of properties with the date properties being expressed as a [datetime](
+The EDR query parser converts the datetime parameter into a number of properties
+with the date properties being expressed as a [datetime](
     https://docs.python.org/3/library/datetime.html
 ) object
 
