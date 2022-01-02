@@ -156,6 +156,7 @@ def test_query_type_is_corridor(url, expected):
     [
         ("https://somewhere.com/collections/my_collection/position?", False),
         ("https://somewhere.com/collections/my_collection/items?", True),
+        ("https://somewhere.com/collections/my_collection/items/some-item", True),
     ],
 )
 def test_query_type_is_items(url, expected):
@@ -247,8 +248,9 @@ def test_parameter_name(url, expected):
         ("https://somewhere.com/collections/my_collection/position", None),
     ],
 )
-def test_items_id(url, expected):
+def test_item_id(url, expected):
     edr_query = EDRQueryParser(url)
+    assert edr_query.item_id == expected
     assert edr_query.items_id == expected
 
 
@@ -268,8 +270,9 @@ def test_items_id(url, expected):
         ("https://somewhere.com/collections/my_collection/position", None),
     ],
 )
-def test_locations_id(url, expected):
+def test_location_id(url, expected):
     edr_query = EDRQueryParser(url)
+    assert edr_query.location_id == expected
     assert edr_query.locations_id == expected
 
 
@@ -292,8 +295,9 @@ def test_locations_id(url, expected):
         ),
     ],
 )
-def test_instances_id(url, expected):
+def test_instance_id(url, expected):
     edr_query = EDRQueryParser(url)
+    assert edr_query.instance_id == expected
     assert edr_query.instances_id == expected
 
 
