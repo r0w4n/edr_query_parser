@@ -50,8 +50,8 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/posi
                            '&coords=POINT(57.819 -3.966)&datetime=2019-09-07T15:50-04:00/2019-09-07T15:50-05:00'
                            '&f=geoJSON&crs=84&z=500/400')
 
-if edr_query.is_instances:
-    print(edr_query.instances_id)
+if edr_query.instance_id: #is it an instance
+    print(edr_query.instance_id)
 else:
     print(edr_query.query_type.is_position) # True
     print(edr_query.query_type.is_radius) # False
@@ -74,7 +74,18 @@ edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/loca
                            'f=geoJSON&crs=84&z=500/400')
 
 if edr_query.query_type.is_locations:
-    print(edr_query.locations_id) #aberdeen
+    print(edr_query.location_id) #aberdeen
+```
+
+### item ID Example
+
+```python
+from edr_query_parser import EDRQueryParser
+
+edr_query = EDRQueryParser('https://somewhere.com/collections/my_collection/items/2019-09-07')
+
+if edr_query.query_type.is_items:
+    print(edr_query.item_id) #2019-09-07
 ```
 
 ### coords Example

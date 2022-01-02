@@ -1,3 +1,4 @@
+import warnings
 from datetime import datetime
 from enum import Enum
 from typing import Optional
@@ -81,15 +82,11 @@ class EDRQueryParser:
         return Parameter(self._url.get_parameter("height-units"))
 
     @property
-    def instances_id(self) -> Optional[str]:
+    def instance_id(self) -> Optional[str]:
         return self._url.get_path_id("instances")
 
     @property
-    def is_instances(self) -> bool:
-        return self._url.is_instances()
-
-    @property
-    def items_id(self) -> Optional[str]:
+    def item_id(self) -> Optional[str]:
         return self._url.get_path_id("items")
 
     @property
@@ -97,7 +94,7 @@ class EDRQueryParser:
         return ParameterInt(self._url.get_parameter("limit"))
 
     @property
-    def locations_id(self) -> Optional[str]:
+    def location_id(self) -> Optional[str]:
         return self._url.get_path_id("locations")
 
     @property
@@ -127,6 +124,33 @@ class EDRQueryParser:
     @property
     def z(self):
         return Z(self._url.get_parameter("z"))
+
+    @property
+    def instances_id(self) -> Optional[str]:
+        warnings.warn(
+            "instances_id has been replaced with instance_id", DeprecationWarning
+        )
+        return self.instance_id
+
+    @property
+    def is_instances(self) -> bool:
+        warnings.warn(
+            "is_instances is being removed replace with instance_id evaluation",
+            DeprecationWarning,
+        )
+        return self._url.is_instances()
+
+    @property
+    def items_id(self) -> Optional[str]:
+        warnings.warn("items_id has been replaced with item_id", DeprecationWarning)
+        return self.item_id
+
+    @property
+    def locations_id(self) -> Optional[str]:
+        warnings.warn(
+            "locations_id has been replaced with location_id", DeprecationWarning
+        )
+        return self.location_id
 
 
 class Parameter:
