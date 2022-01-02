@@ -52,10 +52,6 @@ def test_collection_name(url, expected):
             "https://somewhere.com/collections/metar/instances/some_instance/radius?",
             "radius",
         ),
-(
-            "https://somewhere.com/collections/metar/instances/some_instance/radius?",
-            "radius",
-        ),
     ],
 )
 def test_query_type(url, expected):
@@ -255,6 +251,7 @@ def test_parameter_name(url, expected):
 def test_item_id(url, expected):
     edr_query = EDRQueryParser(url)
     assert edr_query.item_id == expected
+    assert edr_query.items_id == expected
 
 
 @pytest.mark.parametrize(
@@ -276,6 +273,7 @@ def test_item_id(url, expected):
 def test_location_id(url, expected):
     edr_query = EDRQueryParser(url)
     assert edr_query.location_id == expected
+    assert edr_query.locations_id == expected
 
 
 @pytest.mark.parametrize(
@@ -300,6 +298,7 @@ def test_location_id(url, expected):
 def test_instance_id(url, expected):
     edr_query = EDRQueryParser(url)
     assert edr_query.instance_id == expected
+    assert edr_query.instances_id == expected
 
 
 @pytest.mark.parametrize(
