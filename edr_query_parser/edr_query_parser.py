@@ -1,6 +1,7 @@
 import warnings
 from datetime import datetime
 from enum import Enum
+from re import search
 from typing import Optional
 from urllib.parse import parse_qs, urlsplit
 
@@ -10,11 +11,18 @@ from geomet import wkt
 
 class EDRURL:
     def __init__(self, url):
+        if not self.is_url_valid(url):
+            raise ValueError("EDR URL must contain collections name")
+
         self._url_parts = list(filter(None, urlsplit(url).path.split("/")))
         self._query_parts = {
             str(key): "".join(value)
             for key, value in parse_qs(urlsplit(url).query).items()
         }
+
+    @staticmethod
+    def is_url_valid(url):
+        return bool(search("/collections/[^/]+", url))
 
     def get_path_id(self, query_id) -> Optional[str]:
         try:
@@ -40,7 +48,10 @@ class EDRURL:
 
 class EDRQueryParser:
     def __init__(self, url):
-        self._url = EDRURL(url)
+        try:
+            self._url = EDRURL(url)
+        except ValueError as exception:
+            raise exception
 
     @property
     def bbox(self):
@@ -52,10 +63,7 @@ class EDRQueryParser:
 
     @property
     def collection_name(self) -> str:
-        try:
-            return self._url.get_path_part("collections", 1)
-        except (ValueError, IndexError):
-            raise ValueError("collection name not found in url")
+        return self._url.get_path_part("collections", 1)
 
     @property
     def coords(self):
