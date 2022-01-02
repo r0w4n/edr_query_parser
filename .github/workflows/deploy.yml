@@ -12,9 +12,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt; fi
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt; fi
       - name: Build package
         run: |
           python -m build
