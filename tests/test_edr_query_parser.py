@@ -52,7 +52,7 @@ def test_collection_name(url, expected):
             "https://somewhere.com/collections/metar/instances/some_instance/radius?",
             "radius",
         ),
-(
+        (
             "https://somewhere.com/collections/metar/instances/some_instance/radius?",
             "radius",
         ),
