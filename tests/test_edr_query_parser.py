@@ -12,16 +12,24 @@ from edr_query_parser import EDRQueryParser
         ("https://somewhere.com/collections/my_collection/corridor?", "my_collection"),
         ("https://somewhere.com/v1/collections/collections/position?", "collections"),
         ("https://somewhere.com/collections/observations/position?", "observations"),
-        ("https://somewhere.com/collections", "collection name not found in url"),
+        ("https://somewhere.com/collections", "EDR URL must contain collections name"),
         (
             "https://somewhere.com/items/my_collection",
-            "collection name not found in url",
+            "EDR URL must contain collections name",
+        ),
+        (
+            "collections/my_collection",
+            "EDR URL must contain collections name",
+        ),
+        (
+            "/collections/observations/position?",
+            "observations",
         ),
     ],
 )
 def test_collection_name(url, expected):
-    edr_query = EDRQueryParser(url)
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.collection_name == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -55,8 +63,8 @@ def test_collection_name(url, expected):
     ],
 )
 def test_query_type(url, expected):
-    edr_query = EDRQueryParser(url)
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.query_type.value == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -108,6 +116,7 @@ def test_query_type_is_radius(url, expected):
     [
         ("https://somewhere.com/collections/my_collection/area?", True),
         ("https://somewhere.com/collections/my_collection/radius?", False),
+        ("/collections/my_collection/radius?", False),
     ],
 )
 def test_query_type_is_area(url, expected):
@@ -225,8 +234,8 @@ def test_is_instances(url, expected):
     ],
 )
 def test_parameter_name(url, expected):
-    edr_query = EDRQueryParser(url)
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.parameter_name.list == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -397,8 +406,8 @@ def test_coords_wkt(url, expected):
     ],
 )
 def test_z_float(url, expected):
-    edr_query = EDRQueryParser(url)
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.z.float == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -431,8 +440,8 @@ def test_z_float(url, expected):
     ],
 )
 def test_z_interval_from(url, expected):
-    edr_query = EDRQueryParser(url)
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.z.interval_from == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -465,9 +474,8 @@ def test_z_interval_from(url, expected):
     ],
 )
 def test_z_interval_to(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.z.interval_to == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -532,9 +540,8 @@ def test_z_is_list(url, expected):
     ],
 )
 def test_z_list(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.z.list == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -584,8 +591,8 @@ def test_z_is_interval(url, expected):
     ],
 )
 def test_coords_coordinates(url, expected):
-    edr_query = EDRQueryParser(url)
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.coords.coordinates == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -613,9 +620,8 @@ def test_coords_coordinates(url, expected):
     ],
 )
 def test_coords_coords_type(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.coords.coords_type == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -643,9 +649,8 @@ def test_coords_coords_type(url, expected):
     ],
 )
 def test_datetime_exact(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.datetime.exact == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -700,9 +705,8 @@ def test_datetime_is_interval(url, expected):
     ],
 )
 def test_datetime_interval_from(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.datetime.interval_from == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -730,9 +734,8 @@ def test_datetime_interval_from(url, expected):
     ],
 )
 def test_datetime_interval_to(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.datetime.interval_to == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -760,9 +763,8 @@ def test_datetime_interval_to(url, expected):
     ],
 )
 def test_bbox(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.bbox.list == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -894,9 +896,8 @@ def test_datetime_is_interval_open_end(url, expected):
     ],
 )
 def test_datetime_interval_open_end(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.datetime.interval_open_end == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
@@ -924,9 +925,8 @@ def test_datetime_interval_open_end(url, expected):
     ],
 )
 def test_datetime_interval_open_start(url, expected):
-    edr_query = EDRQueryParser(url)
-
     try:
+        edr_query = EDRQueryParser(url)
         assert edr_query.datetime.interval_open_start == expected
     except ValueError as raised_exception:
         assert str(raised_exception) == expected
