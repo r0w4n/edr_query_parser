@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import Enum
 from re import search
 from typing import Optional
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, urlparse
 
 from dateutil.parser import isoparse
 from geomet import wkt
@@ -14,11 +14,8 @@ class EDRURL:
         if not self.is_url_valid(url):
             raise ValueError("EDR URL must contain collections name")
 
-        self._url_parts = list(filter(None, urlsplit(url).path.split("/")))
-        self._query_parts = {
-            str(key): "".join(value)
-            for key, value in parse_qs(urlsplit(url).query).items()
-        }
+        self.parsed_url = urlparse(url)
+        self._url_parts = list(filter(None, self.parsed_url.path.split("/")))
 
     @staticmethod
     def is_url_valid(url):
@@ -26,12 +23,15 @@ class EDRURL:
 
     def get_path_id(self, query_id) -> Optional[str]:
         try:
-            return self._url_parts[self._url_parts.index(query_id) + 1]
+            return self.get_path_part(query_id, 1)
         except (IndexError, ValueError):
             return None
 
     def get_parameter(self, name):
-        return self._query_parts.get(name)
+        try:
+            return parse_qs(self.parsed_url.query)[name][0]
+        except KeyError:
+            return None
 
     def get_path_part(self, index, advance) -> str:
         return self._url_parts[self._url_parts.index(index) + advance]
