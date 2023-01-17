@@ -39,8 +39,7 @@ class EDRURL:
     def get_query_type(self):
         if self.is_instances():
             return self._url_parts[-1]
-        else:
-            return self.get_path_part("collections", 2)
+        return self.get_path_part("collections", 2)
 
     def is_instances(self):
         return self.get_path_part("collections", 2) == "instances"
